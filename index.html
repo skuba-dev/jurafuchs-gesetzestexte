@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Normfenster – Gesetzestexte verstehen</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#panes">Zum Normtext springen</a>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M5 7h14M5 7l-2.5 6a3 3 0 0 0 5 0L5 7zm14 0l-2.5 6a3 3 0 0 0 5 0L19 7zM8 21h8"/></svg>
+    <span>Normfenster</span>
+    <span class="law-pill">StGB</span>
+  </div>
+
+  <div class="search" role="search">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <label for="q">Suche</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Norm oder Stichwort, z. B. 212, Mord, Heimtücke" aria-controls="results" aria-expanded="false">
+    <kbd aria-hidden="true">Strg K</kbd>
+    <div id="results" class="results" role="listbox" aria-label="Suchergebnisse" hidden></div>
+  </div>
+
+  <div class="top-actions">
+    <div class="seg" role="group" aria-label="Ansicht">
+      <span class="seg-label">Ansicht</span>
+      <button data-role="student" title="Studium: Lernhilfen, Lernstand, Aufsätze und Examensfälle zuerst">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M2.5 9.5L12 5l9.5 4.5L12 14 2.5 9.5zM6.5 12v4.2c0 1 2.5 2.3 5.5 2.3s5.5-1.3 5.5-2.3V12M21.5 9.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Studium</button>
+      <button data-role="pro" title="Praxis: Kommentare und aktuelle Rechtsprechung zuerst, ohne Lernhilfen">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Praxis</button>
+    </div>
+    <div class="seg" role="group" aria-label="Verweise öffnen in">
+      <span class="seg-label">Verweise</span>
+      <button data-linkmode="split" title="Verweise öffnen als Splitscreen im selben Tab">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v16" stroke="currentColor" stroke-width="1.8"/></svg>Split</button>
+      <button data-linkmode="tab" title="Verweise in neuem Browser-Tab öffnen (für Tab-Manager-Nutzer:innen)">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 4h11v11M20 4L10 14M17 13v6H5V7h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Neuer Tab</button>
+    </div>
+    <button class="icon-btn" id="btnLeft" title="Verlauf ein- und ausblenden" aria-label="Verlauf ein- und ausblenden"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4v16" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <button class="icon-btn" id="btnRight" title="Abschnittsliste ein- und ausblenden" aria-label="Abschnittsliste ein- und ausblenden"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 4v16" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <button class="icon-btn" id="btnSettings" title="Einstellungen" aria-label="Einstellungen" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>
+</header>
+
+<nav class="crumbs" id="crumbs" aria-label="Einordnung im Gesetz"></nav>
+
+<div class="scroller" id="scroller">
+  <section class="stage" id="stage">
+    <aside class="side left" id="left" aria-label="Verlauf"></aside>
+
+    <main class="center">
+      <div class="panes" id="panes"></div>
+      <div class="tagbar" id="tagbar"></div>
+      <button class="hintbar" id="hintbar"></button>
+    </main>
+
+    <aside class="side right" id="right" aria-label="Normen des Abschnitts"></aside>
+  </section>
+
+  <section class="extra" id="extra" aria-label="Zusatzinformationen"></section>
+</div>
+
+<div id="pop" class="pop" hidden></div>
+<button id="selbtn" class="selbtn" hidden>Eigene Definition</button>
+<div id="settings" class="settings" role="dialog" aria-label="Einstellungen" hidden></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="data/stgb-text.js"></script>
+<script src="data/stgb-meta.js"></script>
+<script src="data/stgb-defs.js"></script>
+<script src="data/stgb-lit.js"></script>
+<script src="data/stgb-faelle.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

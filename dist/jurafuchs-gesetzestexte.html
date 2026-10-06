@@ -1,0 +1,2170 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Normfenster – Gesetzestexte verstehen</title>
+  <style>
+/* ===== tokens.css ===== */
+/* Jurafuchs Design System – Tokens (1:1 aus DESIGN.md, Abschnitt 3.1). Quelle der Wahrheit: keine losen Hex-Werte außerhalb dieser Datei. */
+:root {
+  /* ---------- Schriften ---------- */
+  --font-sans: "GT Walsheim Pro", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, Menlo, monospace;
+
+  /* ---------- Flächen ---------- */
+  --surface-peach: #fef7f1;   /* Seiten- und Hero-Grund */
+  --surface: #ffffff;         /* Header, Karten, Inputs, sekundäre Buttons */
+  --surface-warm: #f8f5f3;    /* ruhige Panels, Tabellenstreifen (einziges neutrales Panel) */
+
+  /* ---------- Text / Tinte ---------- */
+  --ink: #1f1f1f;             /* Überschriften, Kartentitel */
+  --charcoal: #2e2e2e;        /* Standard-Fließtext, Primary-Button-Fläche */
+  --on-charcoal: #ffffff;     /* Text auf Charcoal */
+  --ink-muted: #595959;       /* Lead, Navigation, Sekundärtext (6,6:1 auf Peach) */
+  --ink-subtle: #7e7e7e;      /* NUR Platzhalter/Deko, nie Fließtext (4,06:1 auf Weiß) */
+
+  /* ---------- Linien ---------- */
+  --border: #ebebeb;          /* Header-Unterkante, Kartentrenner */
+  --border-strong: #d9d9d9;   /* Outline sekundärer Button, Input-Rahmen */
+
+  /* ---------- Marke / Akzente ---------- */
+  --coral: #ef7355;           /* Markenfarbe: Blob, Script-Wortmarke, Flächen. NICHT für kleinen Text */
+  --coral-hover: #cc5537;     /* Hover/Pressed koralle Links (nur großer Text, 4,0:1) */
+  --coral-text: #c2492b;      /* Koralle für Text: 4,6:1 auf Peach, 4,9:1 auf Weiß */
+  --sun: #f5a453;             /* Warmer Zweitakzent, nur Flächen/Illustration */
+  --rose: #e94757;            /* Danger/negativ, nur Flächen/Icons, immer mit Wort */
+  --teal: #01cba8;            /* Illustration/Highlights, nur Flächen */
+  --green: #00c866;           /* Erfolgsmarker (Haken), nur Fläche/Icon */
+  --sky: #06b5ed;            /* Illustration, nur Flächen */
+  --blue: #1e88ce;            /* Illustration, nur Flächen */
+  --navy: #102a43;            /* tiefstes Blau, dunkle Illustrationsgründe */
+  --star: #ffcc02;            /* Bewertungsstern, nur Fläche */
+
+  /* ---------- Feedback-Töne ---------- */
+  --info-bg: #f2f8fd;         /* Fachhinweis (Peer/Rubrik) */
+  --info-border: #c3effd;
+  --info-ink: #12537e;        /* 7,6:1 auf info-bg */
+  --foxxy-bg: #fef7f1;        /* KI-Feedback (= surface-peach) */
+  --foxxy-border: #fce1c5;
+  --foxxy-ink: #e84a24;       /* NUR Illustration (3,6:1). Für Text coral-text verwenden */
+  --success-bg: #ebfff5;      /* Punkte-Pill */
+  --success-ink: #00793c;     /* 5,3:1 auf success-bg */
+  --peer-bg: #fcf5fe;         /* Avatar-Scheibe der Peer-Person */
+  --peer-ink: #6b0995;        /* Initialen im Avatar */
+
+  /* ---------- Abstände (4px-Raster) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---------- Radien ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* ---------- Schatten ---------- */
+  --shadow-sm: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 8px 24px 0 rgba(120, 80, 50, 0.12);
+}
+
+/* ===== components.css ===== */
+/* Jurafuchs Design System – Basis-Komponenten (1:1 aus DESIGN.md, Abschnitt 6.1).
+   In Normfenster genutzt: Button (jf-btn), FeedbackNote (jf-note), visually-hidden.
+   PointsPill und ExamCard sind nicht im Einsatz: Punkte gibt es hier nicht, und die Kartenliste ist flach (kein schwebender Schatten). */
+
+/* ---------- Button ---------- */
+.jf-btn {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.jf-btn--lg { font-size: 15px; padding: 17px 20px; }
+.jf-btn--primary { background: var(--charcoal); color: var(--on-charcoal); }
+.jf-btn--primary:hover { background: var(--ink); }
+.jf-btn--secondary { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
+.jf-btn--secondary:hover { border-color: var(--ink-muted); text-decoration: none; }
+.jf-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.jf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- FeedbackNote ---------- */
+.jf-note {
+  font-family: var(--font-sans);
+  border: 1px solid;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-sizing: border-box;
+}
+.jf-note--info  { background: var(--info-bg);  border-color: var(--info-border); }
+.jf-note--foxxy { background: var(--foxxy-bg); border-color: var(--foxxy-border); }
+.jf-note__label { font-size: 13px; line-height: 18px; font-weight: 700; margin-bottom: 4px; }
+.jf-note--info  .jf-note__label { color: var(--info-ink); }
+.jf-note--foxxy .jf-note__label { color: var(--coral-text); }
+.jf-note__body  { font-size: 12px; line-height: 20px; font-weight: 400; color: var(--ink); }
+
+.jf-visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ===== styles.css ===== */
+/* Normfenster – App-Styles auf Basis des Jurafuchs Design Systems (siehe DESIGN.md).
+   Alle Farben, Abstände, Radien, Schatten und Schriften kommen aus tokens.css.
+   Layout-Maße (Header-/Seitenleistenbreite) sind keine Design-Tokens und stehen hier als lokale Variablen. */
+:root {
+  --top-h: 64px;
+  --crumb-h: 48px;
+  --lw: 280px;
+  --rw: 296px;
+  --law-size: 16px;
+}
+
+/* ============================================================ Basis (DESIGN.md, Abschnitt 5) */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--surface-peach); height: 100%; }
+body {
+  margin: 0; height: 100%; display: flex; flex-direction: column; overflow: hidden;
+  font-family: var(--font-sans); font-size: 16px; line-height: 25px; color: var(--charcoal);
+  background: var(--surface-peach); -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3, h4 { color: var(--ink); font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; padding: 0; }
+a { color: var(--coral-text); text-decoration: none; }
+/* Hover: Unterstreichung statt coral-hover – coral-hover erreicht für kleinen Text nur 4,0:1 (DESIGN.md, Abschnitt 7) */
+a:hover { text-decoration: underline; }
+svg { flex: none; }
+
+/* Fokus: gilt für jedes interaktive Element */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Eingabefelder */
+input, textarea, select {
+  font: inherit; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 12px 14px;
+}
+input::placeholder, textarea::placeholder { color: var(--ink-subtle); }
+input[type="range"] { padding: 0; border: 0; background: none; accent-color: var(--charcoal); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-pill); border: 2px solid transparent; background-clip: content-box; }
+
+.skip { position: absolute; left: var(--space-4); top: -100px; z-index: 200; background: var(--charcoal); color: var(--on-charcoal); padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); }
+.skip:focus { top: var(--space-2); text-decoration: none; }
+
+/* Typografie-Hilfsklassen (DESIGN.md, Abschnitt 3.3) */
+.t-eyebrow { font: 500 13px/18px var(--font-sans); color: var(--coral-text); }
+.t-caption { font: 400 11px/16px var(--font-sans); color: var(--ink-muted); }
+.linkbtn { color: var(--coral-text); font: 500 14px/20px var(--font-sans); padding: var(--space-1) 0; border-radius: var(--radius-sm); }
+.linkbtn:hover { text-decoration: underline; }
+
+/* ============================================================ Header */
+.topbar {
+  height: var(--top-h); flex: none; display: flex; align-items: center; gap: var(--space-6);
+  padding: 0 var(--space-6); background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: var(--space-2); font: 700 20px/26px var(--font-sans); color: var(--ink); white-space: nowrap; }
+.law-pill { font: 500 12px/16px var(--font-sans); padding: 2px var(--space-2); border-radius: var(--radius-sm); background: var(--surface-warm); color: var(--ink); }
+.search {
+  position: relative; flex: 1; max-width: 560px; height: 44px; display: flex; align-items: center; gap: var(--space-2);
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 0 var(--space-3); color: var(--ink-muted);
+}
+.search:focus-within { outline: 2px solid var(--ink); outline-offset: 2px; }
+.search label { font: 500 14px/20px var(--font-sans); color: var(--ink-muted); }
+.search input { flex: 1; min-width: 0; height: 100%; border: 0; border-radius: 0; background: none; padding: 0; color: var(--ink); outline: none; }
+.search input:focus-visible { outline: none; }
+kbd { font: 400 11px/16px var(--font-mono); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0 6px; color: var(--ink-muted); background: var(--surface); }
+.top-actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-2); }
+.seg { display: flex; align-items: center; gap: 2px; background: var(--surface-warm); border-radius: var(--radius-lg); padding: var(--space-1); }
+.seg-label { font: 500 13px/18px var(--font-sans); color: var(--ink-muted); padding: 0 var(--space-2); }
+.seg button { display: flex; align-items: center; gap: var(--space-2); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-md); color: var(--ink-muted); font: 500 14px/20px var(--font-sans); }
+.seg button:hover { color: var(--ink); }
+.seg button.on { background: var(--charcoal); color: var(--on-charcoal); }
+.icon-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--radius-lg); color: var(--ink-muted); }
+.icon-btn:hover, .icon-btn.on { background: var(--surface-warm); color: var(--ink); }
+
+.results { position: absolute; top: 52px; left: 0; right: 0; z-index: 40; max-height: 420px; overflow: auto; padding: var(--space-2);
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.results .res { display: flex; flex-direction: column; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); cursor: pointer; color: var(--ink); font: 400 14px/20px var(--font-sans); }
+.results .res.sel, .results .res:hover { background: var(--surface-warm); }
+.res b { font-weight: 700; }
+.res small { color: var(--ink-muted); font-size: 12px; line-height: 20px; }
+.res mark { background: var(--foxxy-border); color: inherit; border-radius: 2px; padding: 0 1px; }
+.results .empty { padding: var(--space-3); color: var(--ink-muted); font-size: 14px; }
+
+/* ============================================================ Einordnung */
+.crumbs { height: var(--crumb-h); flex: none; display: flex; align-items: center; gap: 2px; padding: 0 var(--space-6); overflow-x: auto; white-space: nowrap;
+  background: var(--surface); border-bottom: 1px solid var(--border); scrollbar-width: none; }
+.crumbs::-webkit-scrollbar { display: none; }
+.crumb { display: inline-flex; align-items: baseline; gap: var(--space-2); padding: var(--space-1) var(--space-2); border-radius: var(--radius-md); font: 500 14px/20px var(--font-sans); color: var(--ink-muted); }
+button.crumb:hover { background: var(--surface-warm); color: var(--ink); }
+.crumb .rng { font: 400 12px/16px var(--font-sans); color: var(--ink-muted); }
+.crumb .lvl { font: 400 11px/16px var(--font-sans); color: var(--ink-muted); }
+.crumb.cur { background: var(--surface-peach); color: var(--ink); font-weight: 700; }
+.crumb-sep { color: var(--ink-subtle); }
+
+/* ============================================================ Arbeitsfläche */
+.scroller { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
+.stage {
+  height: calc(100vh - var(--top-h) - var(--crumb-h)); min-height: 520px;
+  display: grid; grid-template-columns: var(--lw) minmax(0, 1fr) var(--rw); gap: var(--space-4); padding: var(--space-4) var(--space-6);
+}
+.stage.no-left { grid-template-columns: minmax(0, 1fr) var(--rw); }
+.stage.no-right { grid-template-columns: var(--lw) minmax(0, 1fr); }
+.stage.no-left.no-right { grid-template-columns: minmax(0, 1fr); }
+.stage.no-left .left, .stage.no-right .right { display: none; }
+
+.side { display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+.side-head { padding: var(--space-4) var(--space-4) var(--space-3); border-bottom: 1px solid var(--border); }
+.side-head .eyebrow { font: 500 13px/18px var(--font-sans); color: var(--coral-text); }
+.side-head h3 { font: 700 14px/20px var(--font-sans); margin-top: 2px; }
+.side-body { flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-2); }
+.side-foot { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); font: 400 12px/16px var(--font-sans); color: var(--ink-muted); }
+.link-btn { color: var(--coral-text); font: 500 12px/16px var(--font-sans); }
+.link-btn:hover { text-decoration: underline; }
+
+.tabs { display: flex; gap: var(--space-1); padding: var(--space-2); border-bottom: 1px solid var(--border); }
+.tabs button { flex: 1; min-height: 40px; border-radius: var(--radius-md); font: 500 14px/20px var(--font-sans); color: var(--ink-muted); white-space: nowrap; }
+.tabs button:hover { background: var(--surface-warm); color: var(--ink); }
+.tabs button.on { background: var(--charcoal); color: var(--on-charcoal); }
+.tabs i { font: 500 11px/16px var(--font-sans); font-style: normal; background: var(--surface-warm); color: var(--ink); border-radius: var(--radius-pill); padding: 0 6px; margin-left: var(--space-1); }
+.tabs button.on i { background: var(--ink-muted); color: var(--on-charcoal); }
+
+.group-label { font: 500 13px/18px var(--font-sans); color: var(--ink-muted); padding: var(--space-3) var(--space-2) var(--space-1); }
+.nrow { position: relative; display: grid; grid-template-columns: 58px 1fr auto; align-items: baseline; gap: var(--space-2); padding: 10px var(--space-3); border-radius: var(--radius-md); cursor: pointer; color: var(--charcoal); text-decoration: none; }
+.nrow:hover { background: var(--surface-warm); text-decoration: none; }
+.nrow .n { font: 700 14px/20px var(--font-sans); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nrow .t { font: 400 14px/20px var(--font-sans); color: var(--charcoal); }
+.nrow .m { display: inline-flex; align-items: center; gap: var(--space-1); font: 400 12px/16px var(--font-sans); color: var(--ink-muted); white-space: nowrap; }
+.nrow.cur { background: var(--surface-peach); box-shadow: inset 3px 0 0 var(--coral); }
+.nrow.open:not(.cur) { box-shadow: inset 3px 0 0 var(--border-strong); }
+.nrow.gone .n, .nrow.gone .t { color: var(--ink-muted); }
+.nrow.gone .t { font-style: italic; }
+.nrow .sub { grid-column: 2 / 4; font: 400 12px/16px var(--font-sans); color: var(--ink-muted); }
+.star { display: inline-flex; vertical-align: middle; margin-left: var(--space-1); }
+.badge-now, .badge-last { font: 500 11px/16px var(--font-sans); padding: 0 6px; border-radius: var(--radius-pill); margin-left: var(--space-1); white-space: nowrap; }
+.badge-now { background: var(--success-bg); color: var(--success-ink); }
+.badge-last { background: var(--surface-peach); color: var(--coral-text); border: 1px solid var(--foxxy-border); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
+.pips { font-size: 6px; letter-spacing: 1px; color: var(--coral); margin-right: var(--space-1); white-space: nowrap; line-height: 1; }
+.pips i { font-style: normal; color: var(--border-strong); }
+.empty-note { padding: var(--space-5) var(--space-3); color: var(--ink-muted); text-align: center; font: 400 14px/22px var(--font-sans); }
+
+.sec-nav { display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; padding: var(--space-3) var(--space-4); background: var(--surface); color: var(--ink-muted); }
+.sec-nav.prev { border-bottom: 1px solid var(--border); }
+.sec-nav.next { border-top: 1px solid var(--border); }
+.sec-nav:hover:not(:disabled) { background: var(--surface-warm); }
+.sec-nav:disabled { cursor: not-allowed; }
+.sec-nav .sn-l { font: 500 13px/18px var(--font-sans); color: var(--coral-text); }
+.sec-nav:disabled .sn-l { color: var(--ink-muted); }
+.sec-nav .sn-t { font: 500 14px/20px var(--font-sans); color: var(--ink); }
+.sec-nav:disabled .sn-t { color: var(--ink-muted); }
+.sec-nav .sn-r { font: 400 12px/16px var(--font-sans); color: var(--ink-muted); }
+
+/* Lernstand */
+.card-s { background: var(--surface-warm); border-radius: var(--radius-md); padding: var(--space-3); margin: var(--space-2) var(--space-1) var(--space-3); }
+.card-s h4 { font: 700 13px/18px var(--font-sans); margin-bottom: var(--space-2); }
+.bar { height: 8px; border-radius: var(--radius-pill); background: var(--border); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--coral); border-radius: var(--radius-pill); }
+.bar.good > i { background: var(--green); }
+.topic-row { margin-bottom: var(--space-3); }
+.topic-row .l { display: flex; justify-content: space-between; font: 400 12px/16px var(--font-sans); margin-bottom: var(--space-1); color: var(--ink-muted); }
+.rec { padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); margin-bottom: var(--space-2); cursor: pointer; }
+.rec:hover { border-color: var(--ink-muted); }
+.rec .h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); font: 700 13px/18px var(--font-sans); color: var(--ink); }
+.rec .why { font: 400 12px/20px var(--font-sans); color: var(--ink-muted); margin-top: var(--space-1); }
+.pri { font: 500 11px/16px var(--font-sans); padding: 0 var(--space-2); border-radius: var(--radius-sm); background: var(--foxxy-bg); color: var(--coral-text); border: 1px solid var(--foxxy-border); white-space: nowrap; }
+.fine { font: 400 11px/16px var(--font-sans); color: var(--ink-muted); padding: var(--space-1) var(--space-2) var(--space-3); }
+
+/* ============================================================ Normfenster (Mitte) */
+.center { display: flex; flex-direction: column; min-height: 0; min-width: 0; gap: var(--space-3); }
+.panes { flex: 1; min-height: 0; display: flex; gap: var(--space-3); overflow-x: auto; overflow-y: hidden; }
+.pane { position: relative; flex: 1 1 0; min-width: 360px; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+.panes[data-count="1"] .pane { min-width: 0; }
+.pane.focused { border-color: var(--ink-muted); box-shadow: var(--shadow-sm); }
+.pane-head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-3) var(--space-6); border-bottom: 1px solid var(--border); }
+.pane-title { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: var(--space-3); }
+.pane-par { font: 700 20px/26px var(--font-sans); color: var(--coral-text); white-space: nowrap; }
+.pane-title { flex-wrap: wrap; row-gap: 0; }
+.pane-title h2 { font: 700 20px/26px var(--font-sans); min-width: 0; overflow-wrap: break-word; }
+.pane-actions { display: flex; gap: 2px; }
+.pane-actions button { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--radius-md); color: var(--ink-muted); }
+.pane-actions button:hover, .pane-actions button.on { background: var(--surface-warm); color: var(--ink); }
+.pane-body { flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-6) var(--space-6) var(--space-8); font-family: var(--font-sans); font-size: var(--law-size); line-height: 1.65; color: var(--charcoal); scroll-behavior: smooth; }
+
+/* „Kurz erklärt“ = FeedbackNote (info). Längerer Lesetext: 14/22 statt 12/20. */
+.explain { margin-bottom: var(--space-6); padding: var(--space-3); }
+.explain summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); cursor: pointer; list-style: none; margin: 0; border-radius: var(--radius-sm); }
+.explain summary::-webkit-details-marker { display: none; }
+.explain summary::after { content: "▾"; color: var(--info-ink); }
+.explain:not([open]) summary::after { content: "▸"; }
+.explain .jf-note__body { font-size: 14px; line-height: 22px; margin-top: var(--space-1); }
+
+.blk { margin: 0 0 .55em; }
+.blk.abs { display: grid; grid-template-columns: 2.7em 1fr; column-gap: .2em; }
+.abs-n { font: 700 13px/18px var(--font-sans); color: var(--ink-muted); text-align: left; padding: 3px 2px; margin-top: .15em; cursor: copy; border-radius: var(--radius-sm); align-self: start; }
+.abs-n:hover { background: var(--surface-warm); color: var(--ink); }
+.blk.nr { display: grid; grid-template-columns: 1.8em 1fr; margin-left: 2.9em; margin-bottom: .3em; }
+.blk.nr .nn { font: 500 .85em/1.9 var(--font-sans); color: var(--ink-muted); }
+.blk.grp { margin-left: 2.9em; padding-left: var(--space-3); border-left: 3px solid var(--border-strong); margin-bottom: .3em; }
+.blk.txt.cont { margin-left: 2.9em; }
+.flash { animation: flash 2.2s ease-out; border-radius: var(--radius-sm); }
+@keyframes flash { 0%, 35% { background: var(--foxxy-border); box-shadow: 0 0 0 6px var(--foxxy-border); } 100% { background: transparent; box-shadow: 0 0 0 6px transparent; } }
+.gone-note { font: italic 400 14px/22px var(--font-sans); color: var(--ink-muted); padding: var(--space-2) 0; }
+.foot { margin-top: var(--space-6); border-top: 1px dashed var(--border-strong); font: 400 12px/20px var(--font-sans); color: var(--ink-muted); }
+.foot summary { cursor: pointer; padding: var(--space-3) 0; font-weight: 500; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.foot p { margin-bottom: var(--space-2); }
+
+/* Verweise und Begriffe */
+a.xref { color: var(--coral-text); font-weight: 500; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; border-radius: 2px; }
+a.xref:hover { background: var(--surface-peach); }
+a.xref.ext { text-decoration-style: dashed; }
+a.xref.ext::after { content: "↗"; font-size: .75em; margin-left: 2px; }
+.term { border-bottom: 2px dotted var(--info-ink); background: var(--info-bg); cursor: help; border-radius: var(--radius-sm); }
+.term:hover, .term:focus { background: var(--info-border); }
+.term.own { border-bottom-color: var(--coral-text); background: var(--foxxy-bg); }
+.term.own:hover, .term.own:focus { background: var(--foxxy-border); }
+.nodefs .term { border: 0; background: none; cursor: inherit; }
+
+/* ============================================================ Tags, Hinweisleiste */
+.tagbar { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; min-height: 56px; max-height: 104px; overflow-y: auto;
+  padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+.tagbar .lbl { font: 500 13px/18px var(--font-sans); color: var(--ink-muted); margin-right: var(--space-1); white-space: nowrap; }
+.chip { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 32px; padding: var(--space-1) var(--space-3); border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; font: 500 14px/20px var(--font-sans); }
+.chip b { font-weight: 700; color: var(--ink); }
+.chip small { font: 400 12px/16px var(--font-sans); color: var(--ink-muted); }
+.chip:hover { border-color: var(--ink-muted); text-decoration: none; }
+.chip.ext { border-style: dashed; }
+.chip.own { border-color: var(--coral); }
+.chip.openp { background: var(--surface-peach); border-color: var(--foxxy-border); }
+.chip .x { color: var(--ink-muted); line-height: 1; }
+.chip .x:hover { color: var(--ink); }
+.chip-add { border-style: dashed; color: var(--ink-muted); background: transparent; }
+.hintbar { display: flex; justify-content: center; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-lg); font: 500 14px/20px var(--font-sans); color: var(--ink-muted); }
+.hintbar:hover { background: var(--surface); color: var(--ink); }
+
+/* ============================================================ Zusatzinformationen */
+.extra { padding: 0 var(--space-6) var(--space-16); min-height: calc(100vh - var(--top-h) - var(--crumb-h)); }
+.extra-inner { max-width: 1100px; margin: 0 auto; }
+.extra-bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) 0; background: linear-gradient(var(--surface-peach) 85%, transparent); }
+.back { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border-strong); color: var(--ink); font: 500 14px/20px var(--font-sans); }
+.back:hover { border-color: var(--ink-muted); }
+.extra-title { display: flex; flex-direction: column; min-width: 0; }
+.extra-title h2 { font: 700 20px/26px var(--font-sans); }
+.extra-bar .flt { margin-left: auto; display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.flt button { min-height: 36px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink-muted); font: 500 14px/20px var(--font-sans); }
+.flt button:hover { border-color: var(--ink-muted); color: var(--ink); }
+.flt button.on { background: var(--charcoal); border-color: var(--charcoal); color: var(--on-charcoal); }
+.extra-note { margin-bottom: var(--space-4); }
+.extra-note .jf-note__body { font-size: 14px; line-height: 22px; }
+.extra-grid { display: grid; grid-template-columns: 1fr 1fr 340px; gap: var(--space-4); align-items: start; }
+.extra-grid.only-rspr, .extra-grid.only-lit { grid-template-columns: 1fr 340px; }
+.col h3 { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); font: 700 14px/20px var(--font-sans); margin: 0 0 var(--space-3); }
+.xcard { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--space-5); margin-bottom: var(--space-4); }
+.xcard .top { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-2); }
+.xcard h4 { font: 700 14px/20px var(--font-sans); margin-bottom: var(--space-1); }
+.xcard p { font: 400 14px/22px var(--font-sans); color: var(--ink-muted); }
+.xcard .cite { margin-top: var(--space-2); font: 400 12px/16px var(--font-sans); color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.xcard .authors { font: 400 12px/16px var(--font-sans); color: var(--ink-muted); margin-bottom: var(--space-2); }
+.xcard .art-link { display: inline-block; margin-top: var(--space-3); font: 500 14px/20px var(--font-sans); }
+.recs { padding: 0 var(--space-1); }
+.xcard .del { position: absolute; top: var(--space-2); right: var(--space-2); width: 32px; height: 32px; border-radius: var(--radius-md); color: var(--ink-muted); }
+.xcard .del:hover { background: var(--surface-warm); color: var(--ink); }
+.tag { font: 500 11px/16px var(--font-sans); padding: 2px var(--space-2); border-radius: var(--radius-sm); background: var(--surface-warm); color: var(--ink); }
+.tag.lit, .tag.zjs { background: var(--info-bg); color: var(--info-ink); }
+.tag.eg { border: 1px solid var(--border-strong); }
+.tag.mine { background: var(--foxxy-bg); color: var(--coral-text); }
+.tag.new { background: var(--success-bg); color: var(--success-ink); }
+.tag.date { background: none; color: var(--ink-muted); padding: 0; font-weight: 400; }
+.notes { width: 100%; min-height: 220px; resize: vertical; line-height: 22px; border-radius: var(--radius-xl); padding: var(--space-4) var(--space-5); }
+.litflt { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-4); }
+.litflt .lf { min-height: 32px; padding: 0 var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink-muted); font: 500 13px/18px var(--font-sans); }
+.litflt .lf i { font-style: normal; font-weight: 400; margin-left: var(--space-1); }
+.litflt .lf:hover { border-color: var(--ink-muted); color: var(--ink); }
+.litflt .lf.on { background: var(--surface-peach); border-color: var(--ink); color: var(--ink); font-weight: 700; }
+.litflt .lf.on::before { content: "✓ "; }
+
+/* ============================================================ Popover, Einstellungen, Dialog, Toast */
+.pop { position: fixed; z-index: 100; width: 360px; max-width: calc(100vw - 24px); background: var(--surface); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: var(--space-4); font: 400 14px/22px var(--font-sans); color: var(--charcoal); }
+.pop .ph { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-2); }
+.pop .ph strong { font: 700 14px/20px var(--font-sans); color: var(--ink); }
+.pop .kind { font: 500 11px/16px var(--font-sans); padding: 2px var(--space-2); border-radius: var(--radius-sm); background: var(--info-bg); color: var(--info-ink); white-space: nowrap; }
+.pop .kind.leg { background: var(--success-bg); color: var(--success-ink); }
+.pop .subdef { margin-top: var(--space-2); padding: var(--space-1) var(--space-3); border-left: 3px solid var(--border-strong); font-size: 13px; line-height: 20px; color: var(--ink-muted); }
+.pop .subdef b { color: var(--ink); }
+.pop .mine { margin-top: var(--space-3); padding: var(--space-3); border-radius: var(--radius-md); background: var(--foxxy-bg); border: 1px solid var(--foxxy-border); }
+.pop .mine .mh { font: 700 13px/18px var(--font-sans); color: var(--coral-text); margin-bottom: var(--space-1); }
+.pop .row { margin-top: var(--space-3); }
+.pop .prev { font-size: 14px; line-height: 22px; color: var(--ink); }
+.pop .hint { margin-top: var(--space-2); font: 400 11px/16px var(--font-sans); color: var(--ink-muted); }
+.selbtn { position: fixed; z-index: 90; background: var(--charcoal); color: var(--on-charcoal); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); font: 500 14px/20px var(--font-sans); box-shadow: var(--shadow-sm); }
+.selbtn:hover { background: var(--ink); }
+
+.settings { position: fixed; top: calc(var(--top-h) + var(--space-2)); right: var(--space-3); width: 340px; max-height: calc(100vh - var(--top-h) - var(--space-6)); overflow: auto; z-index: 70;
+  background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); padding: var(--space-5); }
+.settings h3 { font: 700 20px/26px var(--font-sans); margin-bottom: var(--space-3); }
+.set-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--border); font: 400 14px/20px var(--font-sans); color: var(--ink); }
+.set-row:first-of-type { border-top: 0; }
+.set-row .d { font: 400 12px/20px var(--font-sans); color: var(--ink-muted); }
+.set-row select { padding: var(--space-2) var(--space-3); max-width: 140px; }
+.set-row input[type=range] { max-width: 140px; }
+.switch { position: relative; width: 44px; height: 24px; flex: none; border-radius: var(--radius-pill); background: var(--border-strong); }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--surface); }
+.switch.on { background: var(--charcoal); }
+.switch.on::after { left: 23px; }
+.set-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.set-actions .jf-btn { padding: 10px 14px; }
+
+.modal { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: var(--space-5); background: color-mix(in srgb, var(--ink) 45%, transparent); }
+.dlg { width: 440px; max-width: 100%; max-height: 100%; overflow: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); padding: var(--space-6); }
+.dlg:has(.role-cards) { width: 580px; }
+.dlg h3 { font: 700 20px/26px var(--font-sans); margin-bottom: var(--space-1); }
+.dlg .sub { font: 400 14px/22px var(--font-sans); color: var(--ink-muted); margin-bottom: var(--space-4); }
+.dlg label { display: block; font: 500 13px/18px var(--font-sans); color: var(--ink); margin: var(--space-4) 0 var(--space-1); }
+.dlg input, .dlg textarea, .dlg select { width: 100%; }
+.dlg textarea { min-height: 96px; resize: vertical; line-height: 22px; }
+.dlg .ref { background: var(--surface-warm); border-radius: var(--radius-md); padding: var(--space-3); font: 400 12px/20px var(--font-sans); color: var(--ink-muted); }
+.dlg .acts { display: flex; gap: var(--space-2); justify-content: flex-end; margin-top: var(--space-6); }
+.dlg .acts .left { margin-right: auto; }
+.role-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.role-card { text-align: left; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); }
+.role-card b { font: 700 14px/20px var(--font-sans); color: var(--ink); }
+.role-card span { font: 400 14px/22px var(--font-sans); color: var(--ink-muted); }
+.role-card:hover { border-color: var(--ink); }
+
+.toast { position: fixed; left: 50%; bottom: var(--space-6); transform: translateX(-50%); z-index: 130; display: flex; align-items: center; gap: var(--space-4);
+  max-width: min(640px, calc(100vw - 32px)); padding: var(--space-3) var(--space-4); background: var(--ink); color: var(--on-charcoal); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); font: 400 14px/20px var(--font-sans); }
+.toast button { color: var(--on-charcoal); font-weight: 500; text-decoration: underline; white-space: nowrap; }
+
+/* ============================================================ Responsiv (keine Werte im Design-System definiert) */
+@media (max-width: 1500px) { .seg-label { display: none; } }
+@media (max-width: 1280px) { :root { --lw: 248px; --rw: 256px; } .extra-grid { grid-template-columns: 1fr 1fr; } .extra-grid .col-notes { grid-column: 1 / -1; } }
+@media (max-width: 1060px) { .search kbd { display: none; } .stage:not(.no-right) { grid-template-columns: var(--lw) minmax(0, 1fr); } .stage:not(.no-right) .right { display: none; } }
+@media (max-width: 800px) { .extra-grid, .extra-grid.only-rspr, .extra-grid.only-lit { grid-template-columns: 1fr; } .brand span:not(.law-pill) { display: none; } .role-cards { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; scroll-behavior: auto !important; } }
+
+</style>
+</head>
+<body>
+
+<a class="skip" href="#panes">Zum Normtext springen</a>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M5 7h14M5 7l-2.5 6a3 3 0 0 0 5 0L5 7zm14 0l-2.5 6a3 3 0 0 0 5 0L19 7zM8 21h8"/></svg>
+    <span>Normfenster</span>
+    <span class="law-pill">StGB</span>
+  </div>
+
+  <div class="search" role="search">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <label for="q">Suche</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Norm oder Stichwort, z. B. 212, Mord, Heimtücke" aria-controls="results" aria-expanded="false">
+    <kbd aria-hidden="true">Strg K</kbd>
+    <div id="results" class="results" role="listbox" aria-label="Suchergebnisse" hidden></div>
+  </div>
+
+  <div class="top-actions">
+    <div class="seg" role="group" aria-label="Ansicht">
+      <span class="seg-label">Ansicht</span>
+      <button data-role="student" title="Studium: Lernhilfen, Lernstand, Aufsätze und Examensfälle zuerst">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M2.5 9.5L12 5l9.5 4.5L12 14 2.5 9.5zM6.5 12v4.2c0 1 2.5 2.3 5.5 2.3s5.5-1.3 5.5-2.3V12M21.5 9.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Studium</button>
+      <button data-role="pro" title="Praxis: Kommentare und aktuelle Rechtsprechung zuerst, ohne Lernhilfen">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Praxis</button>
+    </div>
+    <div class="seg" role="group" aria-label="Verweise öffnen in">
+      <span class="seg-label">Verweise</span>
+      <button data-linkmode="split" title="Verweise öffnen als Splitscreen im selben Tab">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v16" stroke="currentColor" stroke-width="1.8"/></svg>Split</button>
+      <button data-linkmode="tab" title="Verweise in neuem Browser-Tab öffnen (für Tab-Manager-Nutzer:innen)">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 4h11v11M20 4L10 14M17 13v6H5V7h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Neuer Tab</button>
+    </div>
+    <button class="icon-btn" id="btnLeft" title="Verlauf ein- und ausblenden" aria-label="Verlauf ein- und ausblenden"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4v16" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <button class="icon-btn" id="btnRight" title="Abschnittsliste ein- und ausblenden" aria-label="Abschnittsliste ein- und ausblenden"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 4v16" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <button class="icon-btn" id="btnSettings" title="Einstellungen" aria-label="Einstellungen" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>
+</header>
+
+<nav class="crumbs" id="crumbs" aria-label="Einordnung im Gesetz"></nav>
+
+<div class="scroller" id="scroller">
+  <section class="stage" id="stage">
+    <aside class="side left" id="left" aria-label="Verlauf"></aside>
+
+    <main class="center">
+      <div class="panes" id="panes"></div>
+      <div class="tagbar" id="tagbar"></div>
+      <button class="hintbar" id="hintbar"></button>
+    </main>
+
+    <aside class="side right" id="right" aria-label="Normen des Abschnitts"></aside>
+  </section>
+
+  <section class="extra" id="extra" aria-label="Zusatzinformationen"></section>
+</div>
+
+<div id="pop" class="pop" hidden></div>
+<button id="selbtn" class="selbtn" hidden>Eigene Definition</button>
+<div id="settings" class="settings" role="dialog" aria-label="Einstellungen" hidden></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/*
+ * Rohtext StGB §§ 211–231 (Beispiel-Gesetzestext).
+ * Format (wird von app.js geparst):
+ *   "<Ordnungszahl> Abschnitt" + nächste Zeile = Abschnittstitel
+ *   "§ 211 Titel"              = Beginn einer Norm   ("§§ 214 und 215 (weggefallen)" erlaubt)
+ *   "(1) …"                    = Absatz
+ *   "1. …"                     = Nummer
+ *   "> …"                      = eingerückte Gruppe (z. B. Mordmerkmale-Gruppen)
+ *   sonstige Zeile             = Fließtext / Satzfortsetzung
+ *   "Fußnote" + Zeilen "§ x: …"= Fußnoten der Norm
+ * Jede Zeile = ein Block (Zeilenumbrüche der Vorlage sind bereits aufgelöst).
+ */
+window.RAW_STGB = `Sechzehnter Abschnitt
+Straftaten gegen das Leben
+§ 211 Mord
+(1) Der Mörder wird mit lebenslanger Freiheitsstrafe bestraft.
+(2) Mörder ist, wer
+> aus Mordlust, zur Befriedigung des Geschlechtstriebs, aus Habgier oder sonst aus niedrigen Beweggründen,
+> heimtückisch oder grausam oder mit gemeingefährlichen Mitteln oder
+> um eine andere Straftat zu ermöglichen oder zu verdecken,
+einen Menschen tötet.
+Fußnote
+§ 211: Nach Maßgabe der Entscheidungsgründe mit dem GG vereinbar, BVerfGE v. 21.6.1977 I 1236 - 1 BvL 14/76 -
+§ 212 Totschlag
+(1) Wer einen Menschen tötet, ohne Mörder zu sein, wird als Totschläger mit Freiheitsstrafe nicht unter fünf Jahren bestraft.
+(2) In besonders schweren Fällen ist auf lebenslange Freiheitsstrafe zu erkennen.
+§ 213 Minder schwerer Fall des Totschlags
+War der Totschläger ohne eigene Schuld durch eine ihm oder einem Angehörigen zugefügte Mißhandlung oder schwere Beleidigung von dem getöteten Menschen zum Zorn gereizt und hierdurch auf der Stelle zur Tat hingerissen worden oder liegt sonst ein minder schwerer Fall vor, so ist die Strafe Freiheitsstrafe von einem Jahr bis zu zehn Jahren.
+§§ 214 und 215 (weggefallen)
+§ 216 Tötung auf Verlangen
+(1) Ist jemand durch das ausdrückliche und ernstliche Verlangen des Getöteten zur Tötung bestimmt worden, so ist auf Freiheitsstrafe von sechs Monaten bis zu fünf Jahren zu erkennen.
+(2) Der Versuch ist strafbar.
+§ 217 Geschäftsmäßige Förderung der Selbsttötung
+(1) Wer in der Absicht, die Selbsttötung eines anderen zu fördern, diesem hierzu geschäftsmäßig die Gelegenheit gewährt, verschafft oder vermittelt, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.
+(2) Als Teilnehmer bleibt straffrei, wer selbst nicht geschäftsmäßig handelt und entweder Angehöriger des in Absatz 1 genannten anderen ist oder diesem nahesteht.
+Fußnote
+§ 217: IdF d. Art. 1 Nr. 2 G v. 3.12.2015 I 2177 mWv 10.12.2015; nach Maßgabe der Entscheidungsformel mit GG unvereinbar und nichtig gem. BVerfGE v. 26.2.2020 I 525 - 2 BvR 2347/15 u.a. -
+§ 218 Schwangerschaftsabbruch
+(1) Wer eine Schwangerschaft abbricht, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft. Handlungen, deren Wirkung vor Abschluß der Einnistung des befruchteten Eies in der Gebärmutter eintritt, gelten nicht als Schwangerschaftsabbruch im Sinne dieses Gesetzes.
+(2) In besonders schweren Fällen ist die Strafe Freiheitsstrafe von sechs Monaten bis zu fünf Jahren. Ein besonders schwerer Fall liegt in der Regel vor, wenn der Täter
+1. gegen den Willen der Schwangeren handelt oder
+2. leichtfertig die Gefahr des Todes oder einer schweren Gesundheitsschädigung der Schwangeren verursacht.
+(3) Begeht die Schwangere die Tat, so ist die Strafe Freiheitsstrafe bis zu einem Jahr oder Geldstrafe.
+(4) Der Versuch ist strafbar. Die Schwangere wird nicht wegen Versuchs bestraft.
+Fußnote
+§§ 218 bis 219b (früher §§ 218 bis 219d): IdF d. Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 218: Anwendbar ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 I 820 - 2 BvF 2/90 u. a. -
+§ 218a Straflosigkeit des Schwangerschaftsabbruchs
+(1) Der Tatbestand des § 218 ist nicht verwirklicht, wenn
+1. die Schwangere den Schwangerschaftsabbruch verlangt und dem Arzt durch eine Bescheinigung nach § 219 Abs. 2 Satz 2 nachgewiesen hat, daß sie sich mindestens drei Tage vor dem Eingriff hat beraten lassen,
+2. der Schwangerschaftsabbruch von einem Arzt vorgenommen wird und
+3. seit der Empfängnis nicht mehr als zwölf Wochen vergangen sind.
+(2) Der mit Einwilligung der Schwangeren von einem Arzt vorgenommene Schwangerschaftsabbruch ist nicht rechtswidrig, wenn der Abbruch der Schwangerschaft unter Berücksichtigung der gegenwärtigen und zukünftigen Lebensverhältnisse der Schwangeren nach ärztlicher Erkenntnis angezeigt ist, um eine Gefahr für das Leben oder die Gefahr einer schwerwiegenden Beeinträchtigung des körperlichen oder seelischen Gesundheitszustandes der Schwangeren abzuwenden, und die Gefahr nicht auf eine andere für sie zumutbare Weise abgewendet werden kann.
+(3) Die Voraussetzungen des Absatzes 2 gelten bei einem Schwangerschaftsabbruch, der mit Einwilligung der Schwangeren von einem Arzt vorgenommen wird, auch als erfüllt, wenn nach ärztlicher Erkenntnis an der Schwangeren eine rechtswidrige Tat nach den §§ 176 bis 178 des Strafgesetzbuches begangen worden ist, dringende Gründe für die Annahme sprechen, daß die Schwangerschaft auf der Tat beruht, und seit der Empfängnis nicht mehr als zwölf Wochen vergangen sind.
+(4) Die Schwangere ist nicht nach § 218 strafbar, wenn der Schwangerschaftsabbruch nach Beratung (§ 219) von einem Arzt vorgenommen worden ist und seit der Empfängnis nicht mehr als zweiundzwanzig Wochen verstrichen sind. Das Gericht kann von Strafe nach § 218 absehen, wenn die Schwangere sich zur Zeit des Eingriffs in besonderer Bedrängnis befunden hat.
+Fußnote
+§§ 218 bis 219b (früher §§ 218 bis 219d): IdF d. Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 218a Abs. 4: Anwendbar ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 - 2 BvF 2/90 u. a. -
+§ 218b Schwangerschaftsabbruch ohne ärztliche Feststellung; unrichtige ärztliche Feststellung
+(1) Wer in den Fällen des § 218a Abs. 2 oder 3 eine Schwangerschaft abbricht, ohne daß ihm die schriftliche Feststellung eines Arztes, der nicht selbst den Schwangerschaftsabbruch vornimmt, darüber vorgelegen hat, ob die Voraussetzungen des § 218a Abs. 2 oder 3 gegeben sind, wird mit Freiheitsstrafe bis zu einem Jahr oder mit Geldstrafe bestraft, wenn die Tat nicht in § 218 mit Strafe bedroht ist. Wer als Arzt wider besseres Wissen eine unrichtige Feststellung über die Voraussetzungen des § 218a Abs. 2 oder 3 zur Vorlage nach Satz 1 trifft, wird mit Freiheitsstrafe bis zu zwei Jahren oder mit Geldstrafe bestraft, wenn die Tat nicht in § 218 mit Strafe bedroht ist. Die Schwangere ist nicht nach Satz 1 oder 2 strafbar.
+(2) Ein Arzt darf Feststellungen nach § 218a Abs. 2 oder 3 nicht treffen, wenn ihm die zuständige Stelle dies untersagt hat, weil er wegen einer rechtswidrigen Tat nach Absatz 1, den §§ 218 oder 219b oder wegen einer anderen rechtswidrigen Tat, die er im Zusammenhang mit einem Schwangerschaftsabbruch begangen hat, rechtskräftig verurteilt worden ist. Die zuständige Stelle kann einem Arzt vorläufig untersagen, Feststellungen nach § 218a Abs. 2 und 3 zu treffen, wenn gegen ihn wegen des Verdachts einer der in Satz 1 bezeichneten rechtswidrigen Taten das Hauptverfahren eröffnet worden ist.
+Fußnote
+§§ 218 bis 219b (früher §§ 218 bis 219d): IdF d. Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 218b: Anwendbar ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 - 2 BvF 2/90 u. a. -
+§ 218c Ärztliche Pflichtverletzung bei einem Schwangerschaftsabbruch
+(1) Wer eine Schwangerschaft abbricht,
+1. ohne der Frau Gelegenheit gegeben zu haben, ihm die Gründe für ihr Verlangen nach Abbruch der Schwangerschaft darzulegen,
+2. ohne die Schwangere über die Bedeutung des Eingriffs, insbesondere über Ablauf, Folgen, Risiken, mögliche physische und psychische Auswirkungen ärztlich beraten zu haben,
+3. ohne sich zuvor in den Fällen des § 218a Abs. 1 und 3 auf Grund ärztlicher Untersuchung von der Dauer der Schwangerschaft überzeugt zu haben oder
+4. obwohl er die Frau in einem Fall des § 218a Abs. 1 nach § 219 beraten hat,
+wird mit Freiheitsstrafe bis zu einem Jahr oder mit Geldstrafe bestraft, wenn die Tat nicht in § 218 mit Strafe bedroht ist.
+(2) Die Schwangere ist nicht nach Absatz 1 strafbar.
+§ 219 Beratung der Schwangeren in einer Not- und Konfliktlage
+(1) Die Beratung dient dem Schutz des ungeborenen Lebens. Sie hat sich von dem Bemühen leiten zu lassen, die Frau zur Fortsetzung der Schwangerschaft zu ermutigen und ihr Perspektiven für ein Leben mit dem Kind zu eröffnen; sie soll ihr helfen, eine verantwortliche und gewissenhafte Entscheidung zu treffen. Dabei muß der Frau bewußt sein, daß das Ungeborene in jedem Stadium der Schwangerschaft auch ihr gegenüber ein eigenes Recht auf Leben hat und daß deshalb nach der Rechtsordnung ein Schwangerschaftsabbruch nur in Ausnahmesituationen in Betracht kommen kann, wenn der Frau durch das Austragen des Kindes eine Belastung erwächst, die so schwer und außergewöhnlich ist, daß sie die zumutbare Opfergrenze übersteigt. Die Beratung soll durch Rat und Hilfe dazu beitragen, die in Zusammenhang mit der Schwangerschaft bestehende Konfliktlage zu bewältigen und einer Notlage abzuhelfen. Das Nähere regelt das Schwangerschaftskonfliktgesetz.
+(2) Die Beratung hat nach dem Schwangerschaftskonfliktgesetz durch eine anerkannte Schwangerschaftskonfliktberatungsstelle zu erfolgen. Die Beratungsstelle hat der Schwangeren nach Abschluß der Beratung hierüber eine mit dem Datum des letzten Beratungsgesprächs und dem Namen der Schwangeren versehene Bescheinigung nach Maßgabe des Schwangerschaftskonfliktgesetzes auszustellen. Der Arzt, der den Abbruch der Schwangerschaft vornimmt, ist als Berater ausgeschlossen.
+§ 219a (weggefallen)
+§ 219b Inverkehrbringen von Mitteln zum Abbruch der Schwangerschaft
+(1) Wer in der Absicht, rechtswidrige Taten nach § 218 zu fördern, Mittel oder Gegenstände, die zum Schwangerschaftsabbruch geeignet sind, in den Verkehr bringt, wird mit Freiheitsstrafe bis zu zwei Jahren oder mit Geldstrafe bestraft.
+(2) Die Teilnahme der Frau, die den Abbruch ihrer Schwangerschaft vorbereitet, ist nicht nach Absatz 1 strafbar.
+(3) Mittel oder Gegenstände, auf die sich die Tat bezieht, können eingezogen werden.
+Fußnote
+§§ 218 bis 219b (früher §§ 218 bis 219d): IdF d. Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 219b: Anwendbar ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 - 2 BvF 2/90 u. a. -
+§ 219c (weggefallen)
+Fußnote
+§ 219c: Aufgeh. durch Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 219c: Aufhebung wirksam ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 - 2 BvF 2/90 u. a. -
+§ 219d (weggefallen)
+Fußnote
+§ 219d: Aufgeh. durch Art. 13 Nr. 1 G v. 27.7.1992 I 1398 mWv 5.8.1992; Art. 13 Nr. 1 trat einstweilen nicht in Kraft gem. BVerfGE v. 4.8.1992 I 1585 - 2 BvQ 16/92 u. a. -; die einstweilige Anordnung v. 4.8.1992 wurde nach BVerfGE v. 25.1.1993 I 270 wiederholt.
+§ 219d: Aufhebung wirksam ab 16.6.1993 gem. Abschn. II Nr. 1 nach Maßgabe der Nr. 2 bis 9 der Entscheidungsformel gem. BVerfGE v. 28.5.1993 - 2 BvF 2/90 u. a. -
+§ 220 (weggefallen)
+§ 220a (weggefallen)
+§ 221 Aussetzung
+(1) Wer einen Menschen
+1. in eine hilflose Lage versetzt oder
+2. in einer hilflosen Lage im Stich läßt, obwohl er ihn in seiner Obhut hat oder ihm sonst beizustehen verpflichtet ist,
+und ihn dadurch der Gefahr des Todes oder einer schweren Gesundheitsschädigung aussetzt, wird mit Freiheitsstrafe von drei Monaten bis zu fünf Jahren bestraft.
+(2) Auf Freiheitsstrafe von einem Jahr bis zu zehn Jahren ist zu erkennen, wenn der Täter
+1. die Tat gegen sein Kind oder eine Person begeht, die ihm zur Erziehung oder zur Betreuung in der Lebensführung anvertraut ist, oder
+2. durch die Tat eine schwere Gesundheitsschädigung des Opfers verursacht.
+(3) Verursacht der Täter durch die Tat den Tod des Opfers, so ist die Strafe Freiheitsstrafe nicht unter drei Jahren.
+(4) In minder schweren Fällen des Absatzes 2 ist auf Freiheitsstrafe von sechs Monaten bis zu fünf Jahren, in minder schweren Fällen des Absatzes 3 auf Freiheitsstrafe von einem Jahr bis zu zehn Jahren zu erkennen.
+§ 222 Fahrlässige Tötung
+Wer durch Fahrlässigkeit den Tod eines Menschen verursacht, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.
+Siebzehnter Abschnitt
+Straftaten gegen die körperliche Unversehrtheit
+§ 223 Körperverletzung
+(1) Wer eine andere Person körperlich mißhandelt oder an der Gesundheit schädigt, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.
+(2) Der Versuch ist strafbar.
+§ 224 Gefährliche Körperverletzung
+(1) Wer die Körperverletzung
+1. durch Beibringung von Gift oder anderen gesundheitsschädlichen Stoffen,
+2. mittels einer Waffe oder eines anderen gefährlichen Werkzeugs,
+3. mittels eines hinterlistigen Überfalls,
+4. mit einem anderen Beteiligten gemeinschaftlich oder
+5. mittels einer das Leben gefährdenden Behandlung
+begeht, wird mit Freiheitsstrafe von sechs Monaten bis zu zehn Jahren, in minder schweren Fällen mit Freiheitsstrafe von drei Monaten bis zu fünf Jahren bestraft.
+(2) Der Versuch ist strafbar.
+§ 225 Mißhandlung von Schutzbefohlenen
+(1) Wer eine Person unter achtzehn Jahren oder eine wegen Gebrechlichkeit oder Krankheit wehrlose Person, die
+1. seiner Fürsorge oder Obhut untersteht,
+2. seinem Hausstand angehört,
+3. von dem Fürsorgepflichtigen seiner Gewalt überlassen worden oder
+4. ihm im Rahmen eines Dienst- oder Arbeitsverhältnisses untergeordnet ist,
+quält oder roh mißhandelt, oder wer durch böswillige Vernachlässigung seiner Pflicht, für sie zu sorgen, sie an der Gesundheit schädigt, wird mit Freiheitsstrafe von sechs Monaten bis zu zehn Jahren bestraft.
+(2) Der Versuch ist strafbar.
+(3) Auf Freiheitsstrafe nicht unter einem Jahr ist zu erkennen, wenn der Täter die schutzbefohlene Person durch die Tat in die Gefahr
+1. des Todes oder einer schweren Gesundheitsschädigung oder
+2. einer erheblichen Schädigung der körperlichen oder seelischen Entwicklung
+bringt.
+(4) In minder schweren Fällen des Absatzes 1 ist auf Freiheitsstrafe von drei Monaten bis zu fünf Jahren, in minder schweren Fällen des Absatzes 3 auf Freiheitsstrafe von sechs Monaten bis zu fünf Jahren zu erkennen.
+§ 226 Schwere Körperverletzung
+(1) Hat die Körperverletzung zur Folge, daß die verletzte Person
+1. das Sehvermögen auf einem Auge oder beiden Augen, das Gehör, das Sprechvermögen oder die Fortpflanzungsfähigkeit verliert,
+2. ein wichtiges Glied des Körpers verliert oder dauernd nicht mehr gebrauchen kann oder
+3. in erheblicher Weise dauernd entstellt wird oder in Siechtum, Lähmung oder geistige Krankheit oder Behinderung verfällt,
+so ist die Strafe Freiheitsstrafe von einem Jahr bis zu zehn Jahren.
+(2) Verursacht der Täter eine der in Absatz 1 bezeichneten Folgen absichtlich oder wissentlich, so ist die Strafe Freiheitsstrafe nicht unter drei Jahren.
+(3) In minder schweren Fällen des Absatzes 1 ist auf Freiheitsstrafe von sechs Monaten bis zu fünf Jahren, in minder schweren Fällen des Absatzes 2 auf Freiheitsstrafe von einem Jahr bis zu zehn Jahren zu erkennen.
+§ 226a Verstümmelung weiblicher Genitalien
+(1) Wer die äußeren Genitalien einer weiblichen Person verstümmelt, wird mit Freiheitsstrafe nicht unter einem Jahr bestraft.
+(2) In minder schweren Fällen ist auf Freiheitsstrafe von sechs Monaten bis zu fünf Jahren zu erkennen.
+§ 227 Körperverletzung mit Todesfolge
+(1) Verursacht der Täter durch die Körperverletzung (§§ 223 bis 226a) den Tod der verletzten Person, so ist die Strafe Freiheitsstrafe nicht unter drei Jahren.
+(2) In minder schweren Fällen ist auf Freiheitsstrafe von einem Jahr bis zu zehn Jahren zu erkennen.
+§ 228 Einwilligung
+Wer eine Körperverletzung mit Einwilligung der verletzten Person vornimmt, handelt nur dann rechtswidrig, wenn die Tat trotz der Einwilligung gegen die guten Sitten verstößt.
+§ 229 Fahrlässige Körperverletzung
+Wer durch Fahrlässigkeit die Körperverletzung einer anderen Person verursacht, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.
+§ 230 Strafantrag
+(1) Die vorsätzliche Körperverletzung nach § 223 und die fahrlässige Körperverletzung nach § 229 werden nur auf Antrag verfolgt, es sei denn, daß die Strafverfolgungsbehörde wegen des besonderen öffentlichen Interesses an der Strafverfolgung ein Einschreiten von Amts wegen für geboten hält. Stirbt die verletzte Person, so geht bei vorsätzlicher Körperverletzung das Antragsrecht nach § 77 Abs. 2 auf die Angehörigen über.
+(2) Ist die Tat gegen einen Amtsträger, einen für den öffentlichen Dienst besonders Verpflichteten oder einen Soldaten der Bundeswehr während der Ausübung seines Dienstes oder in Beziehung auf seinen Dienst begangen, so wird sie auch auf Antrag des Dienstvorgesetzten verfolgt. Dasselbe gilt für Träger von Ämtern der Kirchen und anderen Religionsgesellschaften des öffentlichen Rechts.
+§ 231 Beteiligung an einer Schlägerei
+(1) Wer sich an einer Schlägerei oder an einem von mehreren verübten Angriff beteiligt, wird schon wegen dieser Beteiligung mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft, wenn durch die Schlägerei oder den Angriff der Tod eines Menschen oder eine schwere Körperverletzung (§ 226) verursacht worden ist.
+(2) Nach Absatz 1 ist nicht strafbar, wer an der Schlägerei oder dem Angriff beteiligt war, ohne daß ihm dies vorzuwerfen ist.
+`;
+
+</script>
+<script>
+/*
+ * Redaktionelle Zusatzdaten zum StGB (Demo-Datensatz).
+ * ACHTUNG: Definitionen, Kurzerklärungen, Prüfungsrelevanz und Fundstellen sind
+ * Beispielinhalte zum Testen der Funktionen – vor echter Nutzung redaktionell prüfen.
+ */
+window.STGB_META = {
+  law: { id: 'stgb', abbr: 'StGB', name: 'Strafgesetzbuch',
+         extUrl: id => 'https://www.gesetze-im-internet.de/stgb/__' + id + '.html' },
+
+  sectionNr: { Sechzehnter: 16, Siebzehnter: 17 },
+
+  // Einordnung oberhalb der Abschnitte (Teile). Abschnitte werden automatisch aus dem Text erzeugt.
+  parts: [ { label: 'Besonderer Teil', from: '80', to: '358' } ],
+  // Abschnitte außerhalb des Beispieltexts (für die Vor-/Zurück-Buttons der Abschnittsleiste)
+  sectionStubs: {
+    15: { title: 'Verletzung des persönlichen Lebens- und Geheimbereichs', range: '§§ 201–206' },
+    18: { title: 'Straftaten gegen die persönliche Freiheit', range: '§§ 232 ff.' }
+  },
+  // Titel unterhalb der Abschnitte (im Beispieltext nicht vorhanden): { label, from, to }
+  titles: [],
+
+  // Themenblöcke für Navigation & Lernstand-Analyse
+  topics: [
+    { id: 'toet', label: 'Tötungsdelikte',                         ids: ['211','212','213','216','217','221','222'] },
+    { id: 'abbr', label: 'Schwangerschaftsabbruch',                ids: ['218','218a','218b','218c','219','219b'] },
+    { id: 'kv',   label: 'Körperverletzung – Kerntatbestände',     ids: ['223','224','225','226','226a','227'] },
+    { id: 'kv2',  label: 'Körperverletzung – Sonderregeln',        ids: ['228','229','230','231'] }
+  ],
+
+  // Definitionen: siehe data/stgb-defs.js
+
+  /* ---------------------------------------------------------------- Normen
+     imp   : Prüfungsrelevanz 1–5 (Startwert, für Lernstand-Analyse)
+     kurz  : „Kurz erklärt“ (Klartext). **fett** erlaubt, Normverweise werden verlinkt.
+     tags  : häufige Cross-Checks [Norm, Kurzlabel] – Normen, die nicht im Datensatz sind, öffnen gesetze-im-internet.de
+     rspr  : Rechtsprechung   lit: norm-spezifische Literatur/Materialien */
+  norms: {
+    '211': { imp:5,
+      kurz:'Qualifiziertes Tötungsdelikt: Wer einen Menschen tötet **und** mindestens ein Mordmerkmal erfüllt, wird zwingend mit lebenslanger Freiheitsstrafe bestraft. Die Merkmale sind in drei Gruppen geordnet: **Motive** (Gruppe 1), **Art der Tatausführung** (Gruppe 2), **Zweck der Tat** (Gruppe 3). Streit: Rspr. sieht § 211 als eigenständigen Tatbestand, die h. L. als Qualifikation zu § 212 – das wirkt sich auf § 28 aus.',
+      tags:[['212','Abgrenzung / Grundtatbestand'],['216','Privilegierung'],['15','Vorsatz'],['22','Versuch'],['28','Besondere persönl. Merkmale'],['13','Unterlassen'],['20','Schuldunfähigkeit'],['57a','Restaussetzung']],
+      rspr:[
+        { court:'BVerfG', date:'21.6.1977', az:'1 BvL 14/76', cite:'BVerfGE 45, 187', title:'Lebenslange Freiheitsstrafe',
+          note:'Die lebenslange Freiheitsstrafe für Mord ist mit dem Grundgesetz vereinbar, wenn die Vollstreckung dem Verurteilten eine realistische Chance auf Wiedererlangung der Freiheit lässt; § 211 ist restriktiv auszulegen.' },
+        { court:'BGH', date:'19.5.1981', az:'GSSt 1/81', cite:'BGHSt 30, 105', title:'Rechtsfolgenlösung bei Heimtücke',
+          note:'Bei Vorliegen außergewöhnlicher Umstände kann der Strafrahmen des § 49 Abs. 1 Nr. 1 angewendet werden, wenn lebenslange Freiheitsstrafe unverhältnismäßig wäre (Haustyrannen-Fall).' },
+        { court:'BGH', date:'—', az:'', cite:'BGHSt 1, 368', title:'Verhältnis § 211 zu § 212',
+          note:'Rspr.: Mord und Totschlag sind selbständige Tatbestände (Selbständigkeitstheorie). Folge für Teilnehmer: § 28 Abs. 1 vs. Abs. 2.' },
+        { court:'BGH', date:'1.3.2018 / 18.6.2020', az:'4 StR 399/17; 4 StR 482/19', cite:'', title:'Berliner Raser-Fälle',
+          note:'Bedingter Tötungsvorsatz und Mordmerkmale (u. a. gemeingefährliche Mittel) bei illegalen Kraftfahrzeugrennen.' }
+      ],
+      lit:[
+        { type:'Materialien', title:'Abschlussbericht der Expertengruppe zur Reform der Tötungsdelikte (§§ 211–213, 57a StGB)', cite:'BMJV, 2015', note:'Reformvorschläge zu den Mordmerkmalen und zur absoluten Strafandrohung.' }
+      ] },
+    '212': { imp:5,
+      kurz:'**Grundtatbestand** der vorsätzlichen Tötung: Wer vorsätzlich einen Menschen tötet, ohne Mörder zu sein, erhält 5 bis 15 Jahre. In besonders schweren Fällen (Abs. 2) lebenslang. Aufbau: Tatbestand (Mensch, Tötung, Kausalität, Vorsatz) – Rechtswidrigkeit – Schuld. Wichtig ist die Abgrenzung des **bedingten Vorsatzes** zur bewussten Fahrlässigkeit (§ 222).',
+      tags:[['211','Qualifikation'],['213','Minder schwerer Fall'],['216','Privilegierung'],['222','Abgrenzung fahrlässig'],['15','Vorsatz'],['22','Versuch'],['32','Notwehr'],['13','Unterlassen']],
+      rspr:[
+        { court:'BGH', date:'4.11.1988', az:'1 StR 262/88', cite:'BGHSt 36, 1', title:'Aids-Entscheidung / Hemmschwelle',
+          note:'Bei äußerst gefährlichen Gewalthandlungen liegt bedingter Tötungsvorsatz nahe; gegen die Annahme kann aber eine hohe Hemmschwelle sprechen.' },
+        { court:'BGH', date:'23.2.2012', az:'4 StR 624/11', cite:'', title:'Hemmschwelle & Gesamtschau',
+          note:'Keine „Vorsatzgrenze“ durch die Hemmschwelle: Der Vorsatz ist anhand einer Gesamtschau aller objektiven und subjektiven Tatumstände zu beurteilen.' }
+      ], lit:[] },
+    '213': { imp:4,
+      kurz:'**Privilegierung** des Totschlags (nicht des Mordes!), mit Strafrahmen 1 bis 10 Jahre. Zwei Alternativen: (1) **Provokation** – der Täter wurde ohne eigene Schuld durch eine Misshandlung oder schwere Beleidigung zum Zorn gereizt und zur Tat hingerissen, (2) **sonstiger minder schwerer Fall** nach Gesamtwürdigung.',
+      tags:[['212','Anwendungsbereich'],['211','Abgrenzung Mord'],['21','Verminderte Schuldfähigkeit'],['46','Strafzumessung']], rspr:[], lit:[] },
+    '216': { imp:4,
+      kurz:'**Privilegierte Tötung**: Der Täter wird durch das ausdrückliche und ernstliche Verlangen des Getöteten zur Tötung bestimmt. Strafrahmen 6 Monate bis 5 Jahre; der Versuch ist strafbar. Zentral ist die Abgrenzung zur **straflosen Beihilfe zur Selbsttötung** (Tatherrschaft über das unmittelbar todbringende Geschehen) und zur Sterbehilfe.',
+      tags:[['212','Abgrenzung'],['211','Mord'],['217','Suizidhilfe'],['13','Unterlassen'],['228','Einwilligung (Grenze)'],['22','Versuch']],
+      rspr:[
+        { court:'BGH', date:'4.7.1984', az:'3 StR 96/84', cite:'BGHSt 32, 367', title:'Wittig-Fall',
+          note:'Zur Garantenstellung und zur Verantwortlichkeit bei Suizid: Wer dem bewusstlosen Suizidenten nicht hilft, kann sich strafbar machen – Abgrenzung zum Selbsttötungsgeschehen.' },
+        { court:'BGH', date:'3.7.2019', az:'5 StR 132/18; 5 StR 393/18', cite:'', title:'Ärztliche Suizidbegleitung',
+          note:'Keine Garantenstellung des Arztes für das Leben des Suizidenten, der sich eigenverantwortlich zur Selbsttötung entschieden hat.' }
+      ], lit:[] },
+    '217': { imp:2,
+      kurz:'Die Norm ist im Gesetzestext **noch enthalten, aber unwirksam**: Das BVerfG hat § 217 am 26.2.2020 für verfassungswidrig und nichtig erklärt (Recht auf selbstbestimmtes Sterben). Sie ist daher heute **nicht mehr anwendbar**, bleibt aber wichtig für das Verständnis der Sterbehilfe-Diskussion.',
+      tags:[['216','Abgrenzung'],['212','Totschlag'],['26','Anstiftung'],['27','Beihilfe'],['13','Garantenstellung']],
+      rspr:[
+        { court:'BVerfG', date:'26.2.2020', az:'2 BvR 2347/15 u. a.', cite:'BVerfGE 153, 182', title:'Suizidhilfe',
+          note:'§ 217 verletzt das allgemeine Persönlichkeitsrecht (Recht auf selbstbestimmtes Sterben) und ist nichtig.' }
+      ], lit:[] },
+    '218': { imp:4,
+      kurz:'**Grundtatbestand** des Schwangerschaftsabbruchs. Strafbar ist das Abbrechen; **vor Abschluss der Einnistung** (Abs. 1 S. 2) liegt kein Abbruch vor. Die Schwangere selbst wird privilegiert (Abs. 3), der Versuch ist strafbar, aber nicht bei der Schwangeren (Abs. 4). Praktisch geprägt von den **Ausnahmen in § 218a**.',
+      tags:[['218a','Straflosigkeit'],['218b','Ärztl. Feststellung'],['218c','Ärztl. Pflichten'],['219','Beratung'],['219b','Mittel'],['212','Mensch vs. Leibesfrucht'],['22','Versuch']],
+      rspr:[
+        { court:'BVerfG', date:'25.2.1975', az:'1 BvF 1/74 u. a.', cite:'BVerfGE 39, 1', title:'Schwangerschaftsabbruch I',
+          note:'Schutzpflicht des Staates für das ungeborene Leben; grundsätzliche Pflicht zur Strafbewehrung.' },
+        { court:'BVerfG', date:'28.5.1993', az:'2 BvF 2/90 u. a.', cite:'BVerfGE 88, 203', title:'Schwangerschaftsabbruch II',
+          note:'Beratungskonzept: Abbruch nach Beratung bleibt rechtswidrig, kann aber tatbestandslos gestellt werden.' }
+      ],
+      lit:[ { type:'Materialien', title:'Bericht der Kommission zur reproduktiven Selbstbestimmung und Fortpflanzungsmedizin', cite:'15.4.2024', note:'Empfehlungen zur Regulierung außerhalb des Strafrechts.' } ] },
+    '218a': { imp:4,
+      kurz:'Hier steckt das **Konzept der Regelung**: Abs. 1 – **Beratungsregelung** (Tatbestand nicht verwirklicht, bis 12 Wochen seit Empfängnis, Beratung ≥ 3 Tage vorher, Arzt). Abs. 2 – **medizinische Indikation** (Rechtfertigung). Abs. 3 – **kriminologische Indikation** (12 Wochen). Abs. 4 – **persönlicher Strafausschluss** der Schwangeren bis 22 Wochen nach Beratung.',
+      tags:[['218','Grundtatbestand'],['219','Beratung'],['218b','Ärztl. Feststellung'],['218c','Ärztl. Pflichten'],['34','Notstand'],['176','Kindesmissbrauch']],
+      rspr:[ { court:'BVerfG', date:'28.5.1993', az:'2 BvF 2/90 u. a.', cite:'BVerfGE 88, 203', title:'Beratungskonzept', note:'Verfassungsrechtliche Vorgaben zu Abs. 1–4.' } ], lit:[] },
+    '218b': { imp:2,
+      kurz:'Sichert die **Indikationsregelung** (§ 218a Abs. 2, 3) ab: Ein **anderer** Arzt muss die Voraussetzungen vorab schriftlich feststellen. Bestraft werden der Abbruch ohne solche Feststellung und die wissentlich unrichtige Feststellung. Die Schwangere bleibt straflos.',
+      tags:[['218a','Indikationen'],['218','Grundtatbestand'],['218c','Ärztl. Pflichten'],['219','Beratung']], rspr:[], lit:[] },
+    '218c': { imp:2,
+      kurz:'**Ärztliche Pflichtverletzungen** beim Abbruch: Keine Gelegenheit zur Darlegung der Gründe, keine ärztliche Beratung über Bedeutung des Eingriffs, keine Prüfung der Schwangerschaftsdauer, oder Abbruch nach Beratung im Fall der Beratungsregelung. Die Schwangere ist nicht strafbar.',
+      tags:[['218a','Straflosigkeit'],['218','Grundtatbestand'],['219','Beratung'],['218b','Ärztl. Feststellung']], rspr:[], lit:[] },
+    '219': { imp:3,
+      kurz:'Regelt die **Beratung**: Sie dient dem Schutz des ungeborenen Lebens, erfolgt durch eine anerkannte Beratungsstelle und wird mit einer Bescheinigung abgeschlossen. Der abbrechende Arzt ist als Berater ausgeschlossen (Abs. 2 S. 3). Voraussetzung für die Straflosigkeit nach § 218a Abs. 1.',
+      tags:[['218a','Straflosigkeit'],['218','Grundtatbestand'],['218c','Ärztl. Pflichten'],['219b','Mittel']],
+      rspr:[ { court:'BVerfG', date:'28.5.1993', az:'2 BvF 2/90 u. a.', cite:'BVerfGE 88, 203', title:'Beratungskonzept', note:'Ausgestaltung der Beratungspflicht.' } ], lit:[] },
+    '219b': { imp:1,
+      kurz:'Strafbar ist das **Inverkehrbringen** von Mitteln oder Gegenständen, die zum Schwangerschaftsabbruch geeignet sind, **in der Absicht**, rechtswidrige Taten nach § 218 zu fördern. Die Schwangere bleibt straflos; die Mittel können eingezogen werden.',
+      tags:[['218','Grundtatbestand'],['218a','Straflosigkeit'],['74','Einziehung']], rspr:[], lit:[] },
+    '221': { imp:3,
+      kurz:'**Aussetzung**: Zwei Tatvarianten – jemanden in eine hilflose Lage **versetzen** oder in hilfloser Lage **im Stich lassen** (mit Obhuts-/Beistandspflicht) – und dadurch in **konkrete Gefahr** des Todes oder einer schweren Gesundheitsschädigung bringen. Qualifikationen in Abs. 2 und Erfolgsqualifikation in Abs. 3 (Tod).',
+      tags:[['212','Tötungsvorsatz'],['222','Fahrlässige Tötung'],['13','Garantenstellung'],['223','Körperverletzung'],['225','Schutzbefohlene'],['18','Erfolgsqualifikation']], rspr:[], lit:[] },
+    '222': { imp:5,
+      kurz:'**Fahrlässige Tötung** – der Klassiker unter den Fahrlässigkeitsdelikten. Prüfung: Erfolg (Tod), Kausalität, **objektive Sorgfaltspflichtverletzung**, objektive Vorhersehbarkeit, **Pflichtwidrigkeitszusammenhang** (hätte pflichtgemäßes Verhalten den Erfolg verhindert?), Rechtswidrigkeit, Schuld (subjektive Sorgfaltspflichtverletzung).',
+      tags:[['212','Abgrenzung Vorsatz'],['229','Parallele KV'],['227','Erfolgsqualifikation'],['15','Fahrlässigkeit'],['13','Unterlassen'],['221','Aussetzung']],
+      rspr:[ { court:'BGH', date:'25.9.1957', az:'4 StR 354/57', cite:'BGHSt 11, 1', title:'Radfahrer-Fall',
+               note:'Pflichtwidrigkeitszusammenhang: Der Erfolg muss bei pflichtgemäßem Verhalten mit an Sicherheit grenzender Wahrscheinlichkeit vermieden worden sein.' } ], lit:[] },
+    '223': { imp:5,
+      kurz:'**Grundtatbestand** der Körperverletzung: Zwei Tathandlungen – **körperliche Misshandlung** oder **Gesundheitsschädigung**. Der Versuch ist strafbar. Verfolgung nur auf Antrag oder bei besonderem öffentlichem Interesse (§ 230). Zentral in jeder Klausur zu den Personendelikten.',
+      tags:[['224','Gefährliche KV'],['226','Schwere KV'],['227','Todesfolge'],['228','Einwilligung'],['229','Fahrlässige KV'],['230','Strafantrag'],['32','Notwehr'],['22','Versuch']],
+      rspr:[ { court:'BGH', date:'6.7.1990', az:'2 StR 549/89', cite:'BGHSt 37, 106', title:'Lederspray-Fall',
+               note:'Kausalität und Garantenstellung bei Produktverantwortung (Rückrufpflicht) im Rahmen der Körperverletzungsdelikte.' } ], lit:[] },
+    '224': { imp:5,
+      kurz:'**Qualifikation** zu § 223 mit fünf Begehungsweisen: (1) **Gift**, (2) **Waffe/gefährliches Werkzeug**, (3) **hinterlistiger Überfall**, (4) **gemeinschaftlich**, (5) **lebensgefährdende Behandlung**. Strafrahmen 6 Monate bis 10 Jahre; in minder schweren Fällen 3 Monate bis 5 Jahre. Der Versuch ist strafbar.',
+      tags:[['223','Grundtatbestand'],['225','Schutzbefohlene'],['226','Schwere KV'],['227','Todesfolge'],['228','Einwilligung'],['25','Mittäterschaft']], rspr:[], lit:[] },
+    '225': { imp:3,
+      kurz:'Besonderes Schutzverhältnis: Geschützt sind Personen **unter 18** oder **wehrlose Kranke/Gebrechliche**, die in einem Fürsorge-, Haus-, Gewalt- oder Dienstverhältnis zum Täter stehen. Tathandlungen: **quälen**, **roh misshandeln**, **böswillig vernachlässigen** (mit Gesundheitsschädigung).',
+      tags:[['223','Grundtatbestand'],['224','Gefährliche KV'],['226','Schwere KV'],['227','Todesfolge'],['13','Garantenstellung']], rspr:[], lit:[] },
+    '226': { imp:4,
+      kurz:'**Erfolgsqualifikation**: Die Körperverletzung führt zu einer der schweren Folgen (Verlust von Sinnen/Fortpflanzungsfähigkeit, Verlust/Gebrauchsunfähigkeit eines wichtigen Gliedes, dauernde Entstellung, Siechtum, Lähmung, geistige Krankheit). Abs. 1 – mind. **Fahrlässigkeit** hinsichtlich der Folge (§ 18). Abs. 2 – **absichtlich/wissentlich**: mind. 3 Jahre.',
+      tags:[['223','Grundtatbestand'],['224','Gefährliche KV'],['227','Todesfolge'],['18','Erfolgsqualifikation'],['228','Einwilligung']], rspr:[], lit:[] },
+    '226a': { imp:2,
+      kurz:'Eigener **Verbrechenstatbestand** gegen die Verstümmelung weiblicher Genitalien (Mindeststrafe 1 Jahr). Gegenüber § 226 spezieller; Einwilligung wirkt wegen § 228 regelmäßig nicht rechtfertigend.',
+      tags:[['223','Grundtatbestand'],['226','Schwere KV'],['5','Auslandstaten']], rspr:[], lit:[] },
+    '227': { imp:5,
+      kurz:'**Erfolgsqualifikation**: Der Täter verursacht durch eine Körperverletzung (§§ 223–226a) den **Tod**. Prüfung: Grunddelikt (vollendet), Tod, Kausalität, **spezifischer Gefahrzusammenhang** (Tod muss sich aus der Körperverletzung ergeben), **wenigstens Fahrlässigkeit** bzgl. des Todes (§ 18). Streit: Handlungs- vs. Erfolgsbezug (Letalitätslehre).',
+      tags:[['223','Grundtatbestand'],['224','Gefährliche KV'],['226','Schwere KV'],['18','Erfolgsqualifikation'],['222','Fahrlässige Tötung'],['212','Abgrenzung Vorsatz'],['231','Schlägerei']],
+      rspr:[ { court:'BGH', date:'9.10.2002', az:'5 StR 42/02', cite:'BGHSt 48, 34', title:'Gubener Hetzjagd',
+               note:'Gefahrzusammenhang bei § 227: Auch eine nicht den Körperverletzungserfolg, sondern die Körperverletzungshandlung betreffende Gefahr kann ausreichen (Handlungs-Gefahrzusammenhang).' } ], lit:[] },
+    '228': { imp:5,
+      kurz:'**Grenze der Einwilligung** bei Körperverletzung: Wirksame Einwilligung rechtfertigt – **es sei denn**, die Tat verstößt trotz Einwilligung gegen die **guten Sitten**. Maßstab: Art und Schwere der Verletzung und Lebensgefahr, nicht der Zweck (Sport, Arztbehandlung etc. regelmäßig unbedenklich).',
+      tags:[['223','Grundtatbestand'],['224','Gefährliche KV'],['216','Tötung auf Verlangen'],['226a','Genitalverstümmelung'],['34','Notstand']],
+      rspr:[ { court:'BGH', date:'26.5.2004', az:'2 StR 505/03', cite:'BGHSt 49, 166', title:'Fesselspiel-Fall',
+               note:'Keine wirksame Einwilligung in ein lebensgefährliches Vorgehen (einvernehmliches Würgen mit Todesfolge): Die Tat verstößt trotz Einwilligung gegen die guten Sitten.' } ], lit:[] },
+    '229': { imp:5,
+      kurz:'**Fahrlässige Körperverletzung**: Prüfung wie bei § 222 (Sorgfaltspflichtverletzung, Vorhersehbarkeit, Pflichtwidrigkeitszusammenhang), aber mit Körperverletzungserfolg. Relatives Antragsdelikt (§ 230).',
+      tags:[['222','Fahrlässige Tötung'],['223','Grundtatbestand'],['230','Strafantrag'],['15','Fahrlässigkeit'],['13','Unterlassen']], rspr:[], lit:[] },
+    '230': { imp:3,
+      kurz:'**Strafantragserfordernis** für §§ 223 und 229 (relative Antragsdelikte): Verfolgung nur auf Antrag, **es sei denn**, die Staatsanwaltschaft bejaht das **besondere öffentliche Interesse**. Antrag grundsätzlich binnen 3 Monaten nach Kenntnis (§ 77b). Bei Taten gegen Amtsträger auch Antrag des Dienstvorgesetzten.',
+      tags:[['223','Körperverletzung'],['229','Fahrlässige KV'],['77','Antragsberechtigte'],['77b','Antragsfrist']], rspr:[], lit:[] },
+    '231': { imp:3,
+      kurz:'Strafbar ist bereits die **Beteiligung an einer Schlägerei oder einem Angriff mehrerer**, wenn dadurch der Tod oder eine schwere Körperverletzung (§ 226) verursacht wird. Der Eintritt der schweren Folge ist **objektive Bedingung der Strafbarkeit**. Straffrei bleibt, wem die Beteiligung nicht vorzuwerfen ist (z. B. Notwehr, Schlichten).',
+      tags:[['223','Körperverletzung'],['224','Gefährliche KV'],['226','Schwere KV'],['227','Todesfolge']], rspr:[], lit:[] }
+  },
+
+  // Allgemeine Literatur (wird bei jeder Norm angezeigt) – Beispielliste, ohne Randnummern
+  litGeneral: [
+    { type:'Kommentar', title:'Leipziger Kommentar zum Strafgesetzbuch (LK)', cite:'De Gruyter', note:'Großkommentar für die wissenschaftlich vertiefte Praxis; ausführliche Nachweise zu Rspr. und Literatur.' },
+    { type:'Kommentar', title:'Nomos Kommentar Strafgesetzbuch (NK-StGB)', cite:'Nomos', note:'Wissenschaftlicher Kommentar mit eigenständigen Positionen; häufig bei dogmatischen Streitfragen herangezogen.' },
+    { type:'Kommentar', title:'BeckOK StGB', cite:'C. H. Beck (online)', note:'Online-Kommentar, laufend aktualisiert – nützlich für die tagesaktuelle Rechtsprechung.' },
+    { type:'Kommentar', title:'Satzger/Schluckebier/Widmaier, StGB (SSW-StGB)', cite:'Carl Heymanns / Wolters Kluwer', note:'Praxiskommentar mit Schwerpunkt auf der Rechtsprechung.' },
+    { type:'Kommentar', title:'Schönke/Schröder, Strafgesetzbuch', cite:'Beck', note:'Großkommentar, Standardwerk in Praxis und Wissenschaft.' },
+    { type:'Kommentar', title:'Fischer, Strafgesetzbuch', cite:'Beck', note:'Kurzkommentar, stark rechtsprechungsorientiert.' },
+    { type:'Kommentar', title:'Münchener Kommentar zum StGB', cite:'Beck', note:'Ausführlicher Kommentar mit wissenschaftlicher Tiefe.' },
+    { type:'Kommentar', title:'Lackner/Kühl/Heger, Strafgesetzbuch', cite:'Beck', note:'Kompakter Kurzkommentar.' },
+    { type:'Lehrbuch', title:'Rengier, Strafrecht Besonderer Teil II', cite:'Beck', note:'Delikte gegen die Person – Tötungs- und Körperverletzungsdelikte (Ausbildungsliteratur).' },
+    { type:'Lehrbuch', title:'Wessels/Hettinger/Engländer, Strafrecht Besonderer Teil 1', cite:'C. F. Müller', note:'Straftaten gegen Persönlichkeits- und Gemeinschaftswerte (Ausbildungsliteratur).' },
+    { type:'Lehrbuch', title:'Eisele, Strafrecht Besonderer Teil I', cite:'Kohlhammer', note:'Straftaten gegen die Person und die Allgemeinheit (Ausbildungsliteratur).' }
+  ]
+};
+
+</script>
+<script>
+/*
+ * Lern-Definitionen zum StGB – je Norm.
+ *   key  : eindeutiger Schlüssel
+ *   term : Anzeigename im Popup
+ *   pat  : RegExp-Quelltext (ohne Gruppen) – der Textteil, an dem die Definition im Gesetzestext hängt
+ *   in   : Normen, in denen der Begriff hervorgehoben wird
+ *   text : Definition
+ *   sub  : optionale Teilbegriffe [{ term, text }], die im Popup unter der Definition erscheinen
+ *          (für Begriffe, die in der Definition vorkommen, aber nicht wörtlich im Gesetzestext stehen)
+ */
+window.STGB_META.defs = [
+
+  /* ------------------------------------------------------------ § 212 Totschlag */
+  { key:'mensch', term:'Mensch', pat:'Mensch(?:en)?', in:['211','212','213','221','222','231'],
+    text:'in einem natürlichen Uterus herangereiftes Wesen, dessen Geburt mindestens schon begonnen hat und das wenigstens für kurze Zeit unabhängig von der Mutter in menschlicher Weise lebt' },
+  { key:'tod', term:'Tod', pat:'tötet|Tod(?= eines Menschen)', in:['211','212','222'],
+    text:'irreversible Beendigung aller Hirnfunktionen' },
+  { key:'bsF', term:'besonders schwerer Fall (Abs. II)', pat:'besonders schweren Fällen', in:['212'],
+    text:'wenn das in der Tat zum Ausdruck kommende Verschulden des Täters so außergewöhnlich groß ist, dass es ebenso schwer wiegt wie das eines Mörders' },
+
+  /* ------------------------------------------------------------ § 211 Mord */
+  { key:'heimtuecke', term:'Heimtücke', pat:'heimtückisch', in:['211'],
+    text:'bewusstes Ausnutzen der auf Arglosigkeit beruhenden Wehrlosigkeit in feindlicher Willensrichtung',
+    sub:[
+      { term:'arglos', text:'wer sich bei Beginn der Tat keines tätlichen Angriffs auf seine körperliche Unversehrtheit oder sein Leben versieht' },
+      { term:'wehrlos', text:'wer infolge seiner Arglosigkeit zur Verteidigung außer Stande oder in seiner Verteidigung stark eingeschränkt ist' }
+    ] },
+  { key:'grausam', term:'grausam', pat:'grausam', in:['211'],
+    text:'wer dem Opfer aus gefühlloser, unbarmherziger Gesinnung Qualen körperlicher oder seelischer Art zufügt, die über das für die Tötung erforderliche Maß hinausgehen.' },
+  { key:'gemeingef', term:'gemeingefährliche Mittel', pat:'gemeingefährlichen Mitteln', in:['211'],
+    text:'solche Mittel, deren Wirkungsweise der Täter im Einzelfall nicht sicher zu beherrschen vermag und deren konkreter Einsatz daher geeignet ist, eine Vielzahl von Menschen (abstrakt) zu gefährden' },
+  { key:'mordlust', term:'Mordlust', pat:'Mordlust', in:['211'],
+    text:'Handlung allein aus unnatürlicher Freude an der Vernichtung eines Menschenlebens' },
+  { key:'geschlechtstrieb', term:'zur Befriedigung des Geschlechtstriebs', pat:'zur Befriedigung des Geschlechtstriebs', in:['211'],
+    text:'wer sich a. durch den Tötungsakt als solchen sexuelle Befriedigung verschaffen will (Lustmörder) oder b. um sich anschließend in nekrophiler Weise an der Leiche zu vergehen oder c. wer im Interesse eines ungestörten Geschlechtsgenusses Gewalt anwendet und dabei den Tod des Opfers billigend in Kauf nimmt' },
+  { key:'habgier', term:'Habgier', pat:'Habgier', in:['211'],
+    text:'ungezügeltes und rücksichtsloses Gewinnstreben um jeden Preis' },
+  { key:'niedrig', term:'sonstige niedere Beweggründe', pat:'niedrigen Beweggründen', in:['211'],
+    text:'solche Motive, die sittlich auf tiefster Stufe stehen und daher besonders verwerflich und verachtenswert sind' },
+  { key:'ermoeglichung', term:'Ermöglichungsabsicht', pat:'zu ermöglichen', in:['211'],
+    text:'Tötung muss (nicht notwendiges) Mittel zur Ermöglichung einer weiteren (eigenen oder fremden) Straftat sein' },
+  { key:'verdeckung', term:'Verdeckungsabsicht', pat:'zu verdecken', in:['211'],
+    text:'Bestreben, das Bekanntwerden einer eigenen oder fremden Vortat oder seiner Täterschaft zu verhindern oder deren Aufklärung zu erschweren, solange die Tat nach Tätervorstellung wirklich noch verheimlicht werden kann (regelmäßig dolus directus I. Grades, ausnahmsweise dolus eventualis ausreichend)' },
+
+  /* ------------------------------------------------------------ § 216 Tötung auf Verlangen */
+  { key:'verlangen', term:'Verlangen', pat:'Verlangen', in:['216'],
+    text:'über bloße Zustimmung hinausgehendes nachdrückliches Begehren' },
+  { key:'ausdruecklich', term:'ausdrücklich', pat:'ausdrückliche', in:['216'],
+    text:'in eindeutiger, unmissverständlicher Weise (auch durch Gesten)' },
+  { key:'ernstlich', term:'ernstlich (ernsthaft)', pat:'ernstliche', in:['216'],
+    text:'sich der Tragweite bewusst (natürliche Einsichts- und Urteilsfähigkeit) und auf fehlerfreier Willensbildung beruhend' },
+  { key:'bestimmen', term:'Bestimmen', pat:'bestimmt worden', in:['216'],
+    text:'Hervorrufen des Tatentschlusses (Verlangen muss bestimmender Tatantrieb sein)' },
+
+  /* ------------------------------------------------------------ § 218 Schwangerschaftsabbruch */
+  { key:'abbrechen', term:'Abbrechen', pat:'abbricht', in:['218'],
+    text:'der Schwangerschaft Eingriff, der zum Absterben der Leibesfrucht führt',
+    sub:[
+      { term:'Leibesfrucht', text:'sich im Mutterleib entwickelndes Leben, welches mit dem 13. Tag nach der Empfängnis beginnt und bis zur Geburt existiert' }
+    ] },
+
+  /* ------------------------------------------------------------ § 223 Körperverletzung */
+  { key:'misshandlung', term:'Körperliche Misshandlung', pat:'körperlich mißhandelt', in:['223'],
+    text:'jede üble, unangemessene Behandlung, welche das körperliche Wohlbefinden oder die Unversehrtheit mehr als nur unerheblich beeinträchtigt' },
+  { key:'gesundheit', term:'Gesundheitsschädigung', pat:'an der Gesundheit schädigt', in:['223'],
+    text:'jedes Hervorrufen oder Steigern eines pathologischen Zustandes',
+    sub:[
+      { term:'Pathologischer Zustand', text:'jede nachteilig abweichende Veränderung der körperlichen Verfassung' }
+    ] },
+
+  /* ------------------------------------------------------------ § 224 Gefährliche Körperverletzung */
+  { key:'gift', term:'Gift', pat:'Gift', in:['224'],
+    text:'jeder organische oder anorganische Stoff, der die Gesundheit durch chemisch-physikalische Wirkung zu beeinträchtigen vermag' },
+  { key:'andere-stoffe', term:'andere gesundheitsschädliche Stoffe', pat:'anderen gesundheitsschädlichen Stoffen', in:['224'],
+    text:'Substanzen mit mechanischer oder thermischer Wirkung sowie krankheitserregende Mikroorganismen und schädliche Stoffe des täglichen Gebrauchs' },
+  { key:'beibringen', term:'Beibringen', pat:'Beibringung', in:['224'],
+    text:'in Verbindung bringen des Stoffes mit dem Körper des Menschen, sodass er seine gesundheitsschädliche Wirkung entfalten kann' },
+  { key:'waffe', term:'Waffe', pat:'Waffe', in:['224'],
+    text:'jeder Gegenstand, der nach seiner Art gerade für Angriffs- oder Verteidigungszwecke bestimmt ist und geeignet, erhebliche Verletzungen zu verursachen' },
+  { key:'werkzeug', term:'gefährliches Werkzeug', pat:'anderen gefährlichen Werkzeugs', in:['224'],
+    text:'jeder Gegenstand, der nach seiner objektiven Beschaffenheit und Art der konkreten Verwendung im Einzelfall dazu geeignet ist, erhebliche Verletzungen zuzufügen' },
+  { key:'ueberfall', term:'Überfall', pat:'Überfalls', in:['224'],
+    text:'plötzlicher, unerwarteter Angriff auf einen Ahnungslosen' },
+  { key:'hinterlistig', term:'hinterlistig', pat:'hinterlistigen', in:['224'],
+    text:'planmäßig-verdeckendes Vorgehen zur Verschleierung der wahren Absicht, um dem Angegriffenen die Abwehr zu erschweren' },
+  { key:'gemeinschaftlich', term:'mit einem anderen Beteiligten gemeinschaftlich', pat:'mit einem anderen Beteiligten gemeinschaftlich', in:['224'],
+    text:'wenn mindestens zwei Personen am Tatort als Angreifer zusammen wirken' },
+
+  /* ------------------------------------------------------------ § 226 Schwere Körperverletzung */
+  { key:'verlust', term:'Verlust', pat:'verliert', in:['226'],
+    text:'Aufhebung der jeweiligen Fähigkeit im Wesentlichen bei Unmöglichkeit der Heilung auf absehbare Zeit' },
+  { key:'sehvermoegen', term:'Verlust des Sehvermögens', pat:'Sehvermögen', in:['226'],
+    text:'wenn die Fähigkeit, Gegenstände zu erkennen, um 90 % aufgehoben ist' },
+  { key:'gehoer', term:'Verlust des Gehörs', pat:'Gehör', in:['226'],
+    text:'wenn die Fähigkeit, artikulierte Laute wahrzunehmen, auf beiden Ohren wesentlich eingeschränkt ist' },
+  { key:'glied', term:'Glied', pat:'wichtiges Glied', in:['226'],
+    text:'nach außen hin in Erscheinung tretendes Körperteil, das eine in sich abgeschlossene Existenz mit besonderer Funktion im Gesamtorganismus besitzt und durch Gelenk mit dem Körper verbunden ist',
+    sub:[
+      { term:'Wichtigkeit des Glieds', text:'wenn das Körperteil nach seiner allgemeinen Bedeutung unter Berücksichtigung der körperlichen Besonderheiten des konkreten Opfers für dieses von besonderer Bedeutung ist' }
+    ] },
+  { key:'entstellung', term:'Erhebliche dauerhafte Entstellung', pat:'in erheblicher Weise dauernd entstellt', in:['226'],
+    text:'wesentliche Veränderung des Erscheinungsbildes des Opfers mit ständiger oder unbestimmt langwieriger Beeinträchtigung, sofern diese nicht in zumutbarer Weise ärztlich zu behandeln ist' },
+  { key:'siechtum', term:'Siechtum', pat:'Siechtum', in:['226'],
+    text:'chronischer Krankheitszustand, der den Gesamtorganismus in Mitleidenschaft zieht und mit einem Schwinden der körperlichen und geistigen Kräfte einhergeht' },
+
+  /* ------------------------------------------------------------ § 227 Körperverletzung mit Todesfolge */
+  { key:'todesfolge', term:'Todesfolge', pat:'Tod(?= der verletzten Person)', in:['227'],
+    text:'Hirntod eines anderen Menschen',
+    sub:[
+      { term:'spezifischer Gefahrzusammenhang', text:'Realisierung der der Körperverletzung innewohnenden spezifischen Gefahr gerade in der Todesfolge, vergleichbar zur objektiven Zurechnung' }
+    ] },
+
+  /* ------------------------------------------------------------ § 228 Einwilligung */
+  { key:'sitten', term:'Sittenverstoß (§ 228 StGB)', pat:'guten Sitten', in:['228'],
+    text:'wenn die Tat auch bei grundsätzlicher Anerkennung des Verfügungsrechts über die eigene Körperintegrität nach Mittel und Art der Verletzung, auch in Zusammenschau mit anderen Normen und ergänzend nach Ziel und Beweggründen gegen das Anstandsgefühl aller billig und gerecht Denkenden nach der für das Zusammenleben grundlegenden Ordnung zu versagen ist' },
+
+  /* ------------------------------------------------------------ § 231 Beteiligung an einer Schlägerei */
+  { key:'schlaegerei', term:'Schlägerei', pat:'Schlägerei', in:['231'],
+    text:'tätliche Auseinandersetzung von mindestens drei Personen, wobei mehrere, nicht unterscheidbare Zweikämpfe ebenfalls genügen' },
+  { key:'angriff', term:'von Mehreren verübter Angriff', pat:'von mehreren verübten Angriff', in:['231'],
+    text:'auf eine Körperverletzung gerichtete Handlung von mindestens zwei Personen' },
+  { key:'beteiligung', term:'Beteiligung', pat:'beteiligt', in:['231'],
+    text:'wenn der Täter am Tatort anwesend ist und in feindlicher Gesinnung in irgendeiner Weise an den Tätlichkeiten teilnimmt' }
+];
+
+</script>
+<script>
+/*
+ * Literatur aus der ZJS (Zeitschrift für das Juristische Studium, www.zjs-online.com – frei zugänglich).
+ * Recherchiert am 5.10.2026. Titel, Autor:innen, Ausgabe und Links wurden an den PDFs der ZJS geprüft.
+ * Die Kurzzusammenfassungen beruhen auf Einleitung / Leitsätzen / Gliederung der Beiträge
+ * (nicht auf einer Volltextlektüre) und sind eigene Formulierungen.
+ *
+ *   norms : Normen, bei denen der Beitrag angezeigt wird
+ *   kind  : 'Aufsatz' | 'Entscheidungsanmerkung' | 'Übungsfall'
+ */
+window.STGB_META.articles = [
+  { key:'kaspar1', kind:'Aufsatz',
+    title:'Grundprobleme der Tötungsdelikte – Teil 1',
+    authors:'Johannes Kaspar, Cornelius Broichmann', issue:'ZJS 3/2013', pages:'S. 249 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2013_3_698.pdf',
+    norms:['211','212','213'],
+    summary:'Einstieg in Totschlag und Mord anhand von Beispielsfällen. Kernfrage ist das Verhältnis von § 211 zu § 212: Die Rechtsprechung sieht zwei selbständige Tatbestände, die h. L. den Mord als Qualifikation. Der Beitrag zeigt, wie sich das auf den Klausuraufbau und auf § 28 StGB auswirkt (strafbegründend nach Rspr. → Abs. 1, strafschärfend nach h. L. → Abs. 2, jeweils bei den Merkmalen der 1. und 3. Gruppe). § 213 wird als bloße Strafzumessungsvorschrift eingeordnet und nicht vertieft.' },
+  { key:'kaspar2', kind:'Aufsatz',
+    title:'Grundprobleme der Tötungsdelikte – Teil 2',
+    authors:'Johannes Kaspar, Cornelius Broichmann', issue:'ZJS 4/2013', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2013_4_717.pdf',
+    norms:['211'],
+    summary:'Fortsetzung mit den Mordmerkmalen der 2. Gruppe (heimtückisch, grausam, gemeingefährliche Mittel), die tat- und nicht täterbezogen sind – § 28 gilt hier nicht. Schwerpunkt ist die Heimtücke: Definition (bewusstes Ausnutzen der Arg- und Wehrlosigkeit, in feindlicher Willensrichtung) und die Frage, wie man sie restriktiv einschränkt, um die absolute Strafdrohung zu vermeiden – erläutert an einem Fall, in dem ein Vater den Täter eines Missbrauchs seiner Tochter erschlägt. Stand 2013 – die „feindliche Willensrichtung“ hat der BGH seither als Zusatzmerkmal aufgegeben (BGH, Urt. v. 19.6.2019 – 5 StR 128/19).' },
+  { key:'mitsch_giraud', kind:'Aufsatz',
+    title:'Mord im deutschen und französischen Strafrecht',
+    authors:'Wolfgang Mitsch, Alix Giraud', issue:'ZJS 6/2013', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2013_6_743.pdf',
+    norms:['211'],
+    summary:'Rechtsvergleich: Ein vom LG Potsdam als Mord mit lebenslanger Freiheitsstrafe geahndeter Fall wird danach beurteilt, wie das französische Strafrecht ihn bewerten würde. Ausgangspunkt ist die seit langem geforderte Reform des § 211 StGB; der Blick ins Ausland soll Impulse für eine Neugestaltung geben.' },
+  { key:'mayer_willauer', kind:'Übungsfall',
+    title:'Das Phänomen der (doppelten) Tatbestandsverschiebung bei Anwendung des § 28 Abs. 2 StGB auf den Teilnehmer im Zusammenhang mit § 216 StGB',
+    authors:'Maximilian Mayer, Tobias Willauer', issue:'ZJS 6/2024', pages:'S. 1153 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2024_6_1895.pdf',
+    norms:['216','211','212'],
+    summary:'Didaktischer Beitrag mit fiktivem Fall zur Beihilfe zum Mord durch eine gutgläubige Teilnehmerin. Erklärt die limitierte Akzessorietät, § 28 Abs. 1 und 2 StGB, den Unterschied zwischen tat- und täterbezogenen Merkmalen und den Irrtum über privilegierende Umstände (§ 16 Abs. 2) – inklusive der „doppelten Tatbestandsverschiebung“ auf Ebene der Tötungsdelikte.' },
+  { key:'mitsch', kind:'Aufsatz',
+    title:'Fahrlässige Tötung oder fahrlässige Beihilfe zum Totschlag?',
+    authors:'Wolfgang Mitsch', issue:'ZJS 2/2011', pages:'',
+    url:'https://zjs-online.com/dat/artikel/2011_2_433.pdf',
+    norms:['222','212'],
+    summary:'Zeigt am Fall des Winnender Amoklaufs, wie sich aus einem Zeitungsbericht strafrechtliche Fragen ableiten lassen. Geprüft wird die Strafbarkeit des Vaters des Täters, der wegen fahrlässiger Tötung in 15 Fällen und fahrlässiger Körperverletzung in 14 Fällen verurteilt wurde, und die dogmatische Frage, ob das Verhalten als fahrlässige Tötung oder als fahrlässige Beihilfe zum Totschlag zu fassen ist.' },
+  { key:'schoeppe', kind:'Aufsatz',
+    title:'§ 216 StGB im Lichte des Rechts auf selbstbestimmtes Sterben – Zur verfassungsrechtlichen Notwendigkeit einer Einschränkung für körperlich handlungsunfähige Personen',
+    authors:'Martin Schöppe', issue:'ZJS 6/2025', pages:'S. 1039 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2025_6_1987.pdf',
+    norms:['216','217'],
+    summary:'Knüpft an das BVerfG-Urteil zu § 217 an und prüft, ob das Verbot der Tötung auf Verlangen das Recht auf selbstbestimmtes Sterben verhältnismäßig einschränkt. Besonderes Augenmerk liegt auf Menschen, die den Suizid körperlich nicht selbst ausführen können; diskutiert werden verfassungskonforme Auslegung, rechtfertigender Notstand und Handlungsbedarf des Gesetzgebers sowie § 216 de lege ferenda.' },
+  { key:'reme', kind:'Aufsatz',
+    title:'Das Grundrecht auf selbstbestimmtes Sterben als Grundrecht mit Ausgestaltungsbedarf',
+    authors:'Johann Remé', issue:'ZJS 6/2025', pages:'S. 1013 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2025_6_1986.pdf',
+    norms:['217','216'],
+    summary:'Öffentlich-rechtlicher Blick auf das Suizidhilfe-Urteil des BVerfG: Die Freiverantwortlichkeit gehört zum Schutzbereich und markiert zugleich die Grenze zur staatlichen Schutzpflicht für das Leben. Der Beitrag fragt, wie der Gesetzgeber das Grundrecht ausgestalten muss, und entwickelt eine Ausgestaltungspflicht.' },
+  { key:'anm217', kind:'Entscheidungsanmerkung',
+    title:'Strafbarkeitsrisiken unter Geltung des zum 10.12.2015 in Kraft getretenen § 217 StGB – zugleich zur tatbestandlichen Reichweite des § 217 StGB (zu BVerfG, Beschl. v. 21.12.2015 – 2 BvR 2347/15)',
+    authors:'', issue:'ZJS 4/2016', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2016_4_1038.pdf',
+    norms:['217'],
+    summary:'Zur Ablehnung des Eilantrags gegen § 217 a. F.: Die Vorschrift begründe kein Strafbarkeitsrisiko für Suizidwillige, die Hilfe Dritter in Anspruch nehmen, und ihre Fortgeltung führe nicht zu irreversiblen Folgen. Der Beitrag beschreibt den Hintergrund (Gesetzgebungsverfahren, Verfassungsbeschwerden von Mitgliedern eines Sterbehilfevereins) und die Reichweite des Tatbestands. Die Norm wurde 2020 vom BVerfG für nichtig erklärt – der Text zeigt den Stand der Diskussion davor.' },
+  { key:'zimmer', kind:'Entscheidungsanmerkung',
+    title:'Schadensersatz wegen mangelnder Aufklärung über Schwangerschaftsrisiken (zu BGH, Urt. v. 14.2.2023 – VI ZR 295/20)',
+    authors:'Richard Zimmer', issue:'ZJS 3/2023', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2023_3_1762.pdf',
+    norms:['218a'],
+    summary:'Zivilrechtliche Entscheidung mit strafrechtlichem Maßstab: Der Arzt haftet für unterlassene Aufklärung nur, wenn der Schwangerschaftsabbruch rechtmäßig gewesen wäre. Für die schwerwiegende Beeinträchtigung des seelischen Gesundheitszustands nach § 218a Abs. 2 StGB müssen Belastungen zu befürchten sein, deren Aufopferung der Frau nicht zugemutet werden kann; der fortgeschrittene Stand der Schwangerschaft darf dabei nicht ausgeblendet werden.' },
+  { key:'wagner_drachsler', kind:'Übungsfall',
+    title:'Übungsfall: Die Party bei den Jacks',
+    authors:'Markus Wagner, Mirjam Drachsler', issue:'ZJS 6/2011', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2011_6_500.pdf',
+    norms:['223','231'],
+    summary:'Fortgeschrittenenklausur zu Zurechnungsfragen und den Körperverletzungsdelikten (§§ 223–231): Nach einer Party-Schlägerei mit zwei Todesfällen wird die Strafbarkeit mehrerer Beteiligter geprüft. Praktischer Tipp zum Aufbau: Weil die Schlägerei (§ 231, objektive Bedingung der Strafbarkeit) nur einmal geprüft werden darf, gliedert die Lösung nach Personen statt nach Tatkomplexen. Außerdem: Panikgefühle sind keine körperliche Misshandlung, sondern allenfalls eine Gesundheitsschädigung.' },
+  { key:'schrott', kind:'Übungsfall',
+    title:'Examensübungsklausur Strafrecht: Nur Bares ist Wahres!',
+    authors:'Nina Schrott', issue:'ZJS 6/2022', pages:'',
+    url:'https://zjs-online.com/dat/artikel/2022_6_1697.pdf',
+    norms:['224','230'],
+    summary:'Schwerpunkte sind Erpressung und Geiselnahme; daneben Körperverletzungsdelikte, darunter das BT-Standardproblem, ob eine Schreckschusspistole eine „Waffe“ oder ein „anderes gefährliches Werkzeug“ im Sinne des § 224 Abs. 1 Nr. 2 ist. Der strafprozessuale Zusatzteil fragt, ob ein Strafantrag (§ 230 StGB) über eine polizeiliche „Onlinewache“ wirksam gestellt werden kann.' },
+  { key:'wagner224', kind:'Entscheidungsanmerkung',
+    title:'Gefährliche Körperverletzung beim gemeinsamen Unterlassen (zu BGH, Beschl. v. 17.1.2023 – 2 StR 459/21 und BGH, Urt. v. 17.5.2023 – 6 StR 275/22)',
+    authors:'Markus Wagner', issue:'ZJS 6/2023', pages:'S. 1414 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2023_6_1814.pdf',
+    norms:['224'],
+    summary:'Zwei BGH-Senate beurteilen § 224 Abs. 1 Nr. 4 („gemeinschaftlich“) beim Unterlassen unterschiedlich: Der 2. Senat verneint die gemeinschaftliche Begehung bei einem Unterlassen durch zwei Garanten, der 6. Senat bejaht sie, wenn sich die Garanten zum Nichtstun verabreden und mindestens zwei zeitweilig am Tatort sind. Der Beitrag erläutert die Entscheidungen und ihre Prüfungsrelevanz.' },
+  { key:'zieschang', kind:'Entscheidungsanmerkung',
+    title:'Versuchte schwere Körperverletzung, fehlgeschlagener Versuch, Rücktritt (zu BGH, Beschl. v. 17.4.2024 – 1 StR 403/23)',
+    authors:'Frank Zieschang', issue:'ZJS 4/2024', pages:'S. 848 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2024_4_1873.pdf',
+    norms:['226'],
+    summary:'Ein Chirurg sterilisiert versehentlich den falschen Patienten; die Zeugungsfähigkeit wird zwei Wochen später wiederhergestellt. Der BGH verlangt, dass die schweren Folgen des § 226 Abs. 1 von längerer Dauer sein müssen – sonst bleibt es beim Versuch. Daran schließen sich Fragen zu error in persona, fehlgeschlagenem Versuch und freiwilligem Rücktritt (§ 24) an.' },
+  { key:'bruening', kind:'Entscheidungsanmerkung',
+    title:'Körperverletzung durch Unterlassen mit Todesfolge im Zusammenhang mit GBL-Konsum (zu BGH, Urt. v. 22.11.2016 – 1 StR 354/16)',
+    authors:'Brüning', issue:'ZJS 6/2017', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2017_6_1176.pdf',
+    norms:['227'],
+    summary:'Auf einer Party trinkt ein Gast hochkonzentriertes GBL und stirbt, weil kein Notarzt gerufen wird. Zentral ist der spezifische Gefahrzusammenhang bei §§ 223, 13, 227: Er ist regelmäßig gegeben, wenn der Garant den lebensgefährlichen Zustand vorwerfbar herbeigeführt hat. Der Beitrag gibt zudem Hinweise zum Aufbau der Prüfung und zur Garantenstellung.' },
+  { key:'rennicke', kind:'Aufsatz',
+    title:'Die sittenwidrige Körperverletzung im Sinne des § 228 StGB',
+    authors:'Jan Rennicke', issue:'ZJS 6/2019', pages:'',
+    url:'https://zjs-online.com/dat/artikel/2019_6_1347.pdf',
+    norms:['228','223'],
+    summary:'Klausurorientierte Darstellung der Einwilligung in Körperverletzungen. § 228 regelt die Einwilligung nicht, sondern nimmt sie in Ausnahmefällen von ihrer Rechtfertigungswirkung aus; die Sittenwidrigkeit bezieht sich auf die Tat, nicht auf die Einwilligung („sittenwidrige Einwilligung“ vermeiden). Mit kurzer Gesetzeshistorie, Definition der Sittenwidrigkeit und prüfungsrelevanten Fallgruppen.' },
+  { key:'gropp', kind:'Aufsatz',
+    title:'Indisponibilität statt Sittenwidrigkeit – Überlegungen zu BGHSt 49, 166',
+    authors:'Walter Gropp', issue:'ZJS 5/2012', pages:'S. 602 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2012_5_614.pdf',
+    norms:['228','227'],
+    summary:'Besprechung des „Fesselspiel“-Urteils (BGH, 26.5.2004 – 2 StR 505/03): Die Partnerin starb bei einvernehmlichem Würgen. Der Autor meint, der BGH habe die Sittenwidrigkeit bei lebensgefährlichen Eingriffen der Sache nach durch die Unverfügbarkeit (Indisponibilität) des preisgegebenen Interesses ersetzt – und begrüßt das ausdrücklich.' },
+  { key:'abraham', kind:'Übungsfall',
+    title:'Fortgeschrittenenübungsklausur: Raufhandel mit ungewisser Kausalität',
+    authors:'Markus Abraham', issue:'ZJS 1/2025', pages:'S. 123 ff.',
+    url:'https://www.zjs-online.com/dat/artikel/2025_1_1920.pdf',
+    norms:['231','223','226'],
+    summary:'Klausur zur Beteiligung an einer Schlägerei (§ 231) samt Körperverletzungsdelikten, Kausalität und Rechtswidrigkeit. Im Fall verliert ein Beteiligter sein Gehör, doch nicht rekonstruierbar ist, wer die Folge verursacht hat. Der Fokus liegt auf der präzisen Auswertung der im Sachverhalt gegebenen Informationen.' },
+  { key:'woring', kind:'Entscheidungsanmerkung',
+    title:'Aussetzung mit Todesfolge, Obhuts- und Beistandspflicht, Gefährdungsvorsatz, Tötung durch Unterlassen – Weidener Flutkanal-Fall (zu BGH, Urt. v. 21.9.2022 – 6 StR 47/22)',
+    authors:'Siegbert Woring', issue:'ZJS 3/2023', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2023_3_1764.pdf',
+    norms:['221','212'],
+    summary:'Eine Freundesgruppe begleitet einen hilflos Betrunkenen aus der Gaststätte; auf dem Heimweg kommt er zu Tode. Der BGH nimmt eine Obhuts- und Beistandspflicht im Sinne des § 221 Abs. 1 Nr. 2 an, wenn man eine hilflose Person aus einem sicheren Umfeld hinausbegleitet und dadurch neue Gefahren entstehen. Zudem: Wer Lebensgefahr erkennt, aber auf einen guten Ausgang hofft, nimmt den Tod nicht „in Kauf“ – dem Tötungsvorsatz fehlt dann das Willenselement.' },
+  { key:'theile', kind:'Entscheidungsanmerkung',
+    title:'Deliktscharakter und Strafrahmen bei Aussetzung mit Todesfolge nach § 221 Abs. 1, Abs. 3 StGB (zu BGH, Beschl. v. 19.10.2011 – 1 StR 233/11)',
+    authors:'Theile', issue:'ZJS 3/2012', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2012_3_576.pdf',
+    norms:['221'],
+    summary:'Die Aussetzung durch Im-Stich-Lassen (§ 221 Abs. 1 Nr. 2) ist stets ein echtes Unterlassungsdelikt, sodass eine Strafrahmenmilderung nach § 13 Abs. 2 nicht möglich ist – auch nicht bei Todesfolge (Abs. 3). Der Beitrag legt am Fall einer Frau, die vom Balkon stürzt, dar, warum die oft übersehene Vorschrift in Tötungskonstellationen wichtig ist, insbesondere wenn Eventualtötungsvorsatz ausscheidet.' },
+  { key:'hobusch', kind:'Übungsfall',
+    title:'Anfängerklausur: Werbung für den Schwangerschaftsabbruch',
+    authors:'Alexander Hobusch', issue:'ZJS 3/2018', pages:'',
+    url:'https://www.zjs-online.com/dat/artikel/2018_3_1219.pdf',
+    norms:['218','218a','219'],
+    summary:'Verfassungsrechtliche Klausur (Urteilsverfassungsbeschwerde einer Ärztin) zur Verfassungsmäßigkeit des früheren § 219a StGB; Meinungs- und Berufsfreiheit stehen im Mittelpunkt, auf die §§ 218 ff. wird als Hintergrund verwiesen. Achtung: § 219a ist inzwischen aufgehoben – lesenswert bleibt der Beitrag für den verfassungsrechtlichen Rahmen der Regelung des Schwangerschaftsabbruchs.' }
+];
+
+</script>
+<script>
+/*
+ * Examensfälle von Examensgerecht (examensgerecht.de) – Fallaufbereitung zu BGH- und OLG-Entscheidungen.
+ * Recherchiert am 5.10.2026. Fundstellen anhand der Fallseiten geprüft (Seitentext bzw. Seitenmetadaten);
+ * Zusammenfassungen sind eigene Formulierungen auf Basis der dortigen Zusammenfassungen/Leitsätze.
+ * Die Fälle selbst (Sachverhalt, Gutachten, Zusatzfragen) stehen nur auf Examensgerecht – hier wird verlinkt.
+ *
+ * Hinweis zu zwei Seiten, deren Metadaten von den Seitentexten abweichen („Quarzsand“, „K.O. Tropfen“,
+ * „um-sich-schlagender Täter“): Es gilt die im Seitentext genannte Entscheidung.
+ */
+(function () {
+  const L = 'Fall auf Examensgerecht lesen ↗';
+  const eg = (key, title, issue, authors, url, norms, summary) =>
+    ({ key, src: 'Examensgerecht', kind: 'Examensfall', title, issue, pages: '', authors, url, norms, summary, linkLabel: L });
+  const U = s => 'https://examensgerecht.de/' + s + '/';
+
+  window.STGB_META.articles = window.STGB_META.articles.concat([
+
+    /* ------------------------------------------------ Mord / Totschlag */
+    eg('eg_leid', 'Das Leid der Welt sollst du nicht ertragen',
+      'BGH, Urt. v. 19.6.2019 – 5 StR 128/19 (NJW 2019, 2413)', 'Antonia Cohrs', U('das-leid-der-welt-sollst-du-nicht-ertragen'),
+      ['211', '212'],
+      'Ein Mann erschlägt seine schlafende Frau mit Hammerschlägen, um sie vor einer aussichtslosen finanziellen Lage zu „bewahren“; sein geplanter Suizid scheitert. Der BGH rückt von der „feindlichen Willensrichtung“ als Zusatzmerkmal der Heimtücke ab: Heimtückisch handelt, wer die Arg- und Wehrlosigkeit bewusst ausnutzt. Ausnahmen gelten nur, wenn das Opfer einverstanden oder zu autonomer Entscheidung nicht fähig ist; besondere Umstände und Motive wirken sich über die Rechtsfolgenlösung (§ 49 Abs. 1 analog) aus. Aktualisiert damit die ältere Darstellung bei Kaspar/Broichmann (ZJS 4/2013).'),
+    eg('eg_fallensteller', 'Der heimtückische Fallensteller',
+      'BGH, Beschl. v. 26.3.2020 – 4 StR 134/19 (NStZ 2020, 609)', 'Moritz Stamme', U('der-heimtueckische-fallensteller'),
+      ['211'],
+      'Ein Täter lockt einen wohlhabenden Mann in eine Falle, erpresst ihn und tötet ihn. Heimtücke liegt auch dann vor, wenn die durch die Arglosigkeit herbeigeführte Wehrlosigkeit tatplangemäß zunächst für einen Raub oder eine räuberische Erpressung ausgenutzt wird. Verdeckungsmord ist möglich, obwohl die Tötung schon bei der Vortat geplant war, sofern Vortat und Tötung ein zweiaktiges Geschehen bilden.'),
+    eg('eg_klein', 'Hoffnungslos und einsam in der Fremde',
+      'BGH, Beschl. v. 12.7.2023 – 6 StR 231/23 (NStZ 2023, 675)', 'Moritz Stamme', U('hoffnungslos-und-einsam-in-der-fremde'),
+      ['211', '212'],
+      'Eine überforderte Mutter tötet ihr drei Monate altes Kind mit Messerstichen. Heimtücke bei Kleinkindern: Ein Kleinkind ist nicht argwohnsfähig, es kommt auf die Arg- und Wehrlosigkeit eines schutzbereiten Dritten an. Daran fehlt es, wenn dieser den Angriff wegen der räumlichen Entfernung nicht wahrnehmen kann und Gegenwehr zu spät käme – hier liegt dann Totschlag statt Mord nahe.'),
+    eg('eg_unterlassen', 'Mord durch Unterlassen: Garantenstellung für strafmündige Minderjährige',
+      'BGH, Urt. v. 7.10.2025 – 3 StR 11/25 (BeckRS 2025, 34352)', 'Shanna Kubaric', U('mord-durch-unterlassen-garantenstellung-minderjaehrige-bgh'),
+      ['211', '212'],
+      'Ein Jugendlicher erschlägt mit einem Freund einen Mann im Schlaf; die Mutter greift nicht ein. Die Garantenstellung sorgeberechtigter Eltern endet nicht mit der Strafmündigkeit des Kindes. Welche Maßnahmen geboten und zumutbar sind, hängt von Alter, Eigenart und Lebensumständen des Minderjährigen ab – vor allem davon, ob konkrete Anhaltspunkte für strafbares Verhalten bestehen. Weitere Themen: Heimtücke und Mittäterschaft.'),
+    eg('eg_quarz', 'Quarzsand- statt Samthandschuhe',
+      'angelehnt an BGH, Urt. v. 18.12.2024 – 2 StR 297/24 (BeckRS 2024, 45803)', 'Shanna Kubaric', U('quarzsand-statt-samthandschuhe'),
+      ['212'],
+      'Drei Männer schlagen einen Behördenmitarbeiter mehrfach mit verstärkten Quarzsandhandschuhen ins Gesicht. Bei besonders gefährlichen Gewalthandlungen dieser Art ist ein bedingter Tötungsvorsatz ernsthaft zu erwägen – dass das Opfer überlebt, schließt ihn nicht aus. Der Fall führt außerdem durch Versuch, Mittäterschaft und Rücktritt.'),
+    eg('eg_platz', 'Platz da, hier fahre ich!',
+      'BGH, Urt. v. 28.8.2025 – 4 StR 476/24', '', U('platz-da-hier-fahre-ichich-kann-es-zahlen'),
+      ['212'],
+      'Eine Autofahrerin „maßregelt“ einen anderen Fahrer durch aggressives Fahren; es kommt zur Kollision mit tödlichen Folgen, und sie entfernt sich ohne Rettungsmaßnahmen. Aggressives Fahrverhalten begründet nicht automatisch bedingten Tötungsvorsatz; ein erst nach dem Unfall gefasster Vorsatz ist aber möglich und kann zu einem versuchten Totschlag durch Unterlassen führen.'),
+    eg('eg_manip', 'Manipulation mit tödlicher Aussicht',
+      'BGH, Beschl. v. 25.10.2023 – 4 StR 81/23 (BeckRS 2023, 47800)', 'Moritz Stamme', U('bgh-4-str-81-23-mittelbare-taeterschaft-bei-suizid'),
+      ['212', '216'],
+      'Ein Mann isoliert einen depressiven Freund und setzt ihn über Stunden massiv unter Druck, sich das Leben zu nehmen; der Freund verletzt sich schwer, überlebt aber. Versuchter Totschlag in mittelbarer Täterschaft setzt voraus, dass der Suizident nicht freiverantwortlich handelt (z. B. durch Zwang, Täuschung oder unzulässige Einflussnahme) und der Täter objektive Tatherrschaft hat. Ein Rücktritt scheidet aus, wenn die Rettung nur der Verschleierung dient.'),
+    eg('eg_mensch', 'Menschwerdung',
+      'BGH, Beschl. v. 11.11.2020 – 5 StR 256/20 (NJW 2021, 645)', 'Maximilian Nussbaum', U('menschwerdung'),
+      ['218', '212', '211'],
+      'Die Grenze zwischen dem Schutz der §§ 218 ff. und der Tötungsdelikte (§§ 211 ff.) markiert der Beginn – nicht die Vollendung – des Geburtsvorgangs: bei natürlicher Geburt die Eröffnungswehen, beim Kaiserschnitt die Öffnung des Uterus mit dem Ziel, die Schwangerschaft zu beenden. Fall: Eine Ärztin tötet bei einem Kaiserschnitt einen der Zwillinge. Geprüft werden Totschlag und ein Rechtfertigungsgrund (§ 34).'),
+
+    /* ------------------------------------------------ Tötung auf Verlangen / Suizid */
+    eg('eg_aerzte', 'Ärztliche Suizidbeihilfe',
+      'BGH, Urt. v. 3.7.2019 – 5 StR 393/18 (NJW 2019, 3089)', 'Antonia Cohrs', U('aerztliche-suizidbeihilfe'),
+      ['216', '217'],
+      'Eine Hausärztin überlässt einer langjährig suizidwilligen Patientin tödliche Medikamente und begleitet die Sterbende. Eine Garantenstellung besteht nicht, wenn der Arzt den Suizid in Absprache mit dem Suizidenten nur begleitet und das Unterlassen von Rettungsmaßnahmen dessen Willen entspricht (Selbstbestimmungsrecht). Die Einnahme der Medikamente wird dem Arzt nicht zugerechnet, solange der Suizident die Herrschaft über das Geschehen behält; auch § 323c scheidet aus.'),
+    eg('eg_insulin', 'Insulin',
+      'BGH, Beschl. v. 28.6.2022 – 6 StR 68/21 (NJW 2022, 3021)', 'Maximilian Nussbaum', U('insulin'),
+      ['216'],
+      'Eine Krankenschwester spritzt ihrem sterbewilligen Mann auf dessen Bitte Insulin. Die Abgrenzung von strafbarer Tötung auf Verlangen und strafloser Beihilfe zum Suizid richtet sich nach der Herrschaft über den letzten lebensbeendenden Akt; eine „normative Gesamtbetrachtung“ zur Begründung freiverantwortlicher Selbsttötung ist dogmatisch fragwürdig. Hilfsweise wird eine Unterlassungsstrafbarkeit (§§ 216, 13; § 221; § 323c) geprüft und verneint.'),
+    eg('eg_pervers', 'Perverser Suizidhelfer',
+      'BGH, Urt. v. 4.7.2018 – 2 StR 245/17 (NJW 2019, 449)', 'Maximilian Nussbaum', U('perverser-suizidhelfer'),
+      ['216', '211', '212'],
+      'Ein sexuell-sadistischer Mann manipuliert eine psychisch kranke Frau online und plant ihre „Hinrichtung“ durch Erhängen. Die Privilegierung des § 216 greift nur, wenn das Verlangen des Opfers auch für den Täter handlungsleitend ist. Ein Sich-Bereiterklären zum Mord (§ 30 Abs. 2 Var. 1) kann auch vorliegen, wenn das potenzielle Opfer Adressat der Erklärung ist; die Literatur plädiert für eine restriktive Auslegung.'),
+    eg('eg_liebe', 'Brennende Liebe',
+      'BGH, Beschl. v. 27.5.2020 – 1 StR 118/20 (NJW 2020, 2971)', '', U('brennende-liebe'),
+      ['216'],
+      'Ein Paar will gemeinsam aus dem Leben scheiden; der Mann zündet das Wohnmobil an, rettet aber im letzten Moment seine Partnerin. Schwerpunkt ist die Brandstiftung (§§ 306a, 306b) und die Frage, ob die tätige Reue des § 306e analog auch greift, wenn die Gefahr nicht durch Löschen, sondern durch Rettung der Person abgewendet wird; § 216 und §§ 223, 224 sind Nebenprobleme.'),
+
+    /* ------------------------------------------------ Aussetzung / fahrlässige Tötung */
+    eg('eg_flut', 'Der Flutkanal',
+      'BGH, Urt. v. 21.9.2022 – 6 StR 47/22 (NStZ 2023, 98)', 'Antonia Cohrs', U('der-flutkanal'),
+      ['221', '212'],
+      'Eine Freundesgruppe begleitet einen hilflos Betrunkenen; er stürzt eine Böschung hinab und ertrinkt in einem Flutkanal. Eine Garantenstellung entsteht nicht schon durch geleisteten Beistand, sondern erst, wenn der Helfende die Lage des Hilfsbedürftigen wesentlich verändert (z. B. Rettungsmöglichkeiten ausschließt oder neue Gefahren schafft). Die bloße Gruppenzugehörigkeit begründet keine gegenseitige Hilfspflicht. Vgl. auch die ZJS-Besprechung von Woring (ZJS 3/2023).'),
+    eg('eg_klasse', 'Die tödliche Klassenfahrt',
+      'LG Mönchengladbach, Urt. v. 15.2.2024 – 23 KLs 6/23 (BeckRS 2024, 1971)', 'Moritz Stamme', U('die-todliche-klassenfahrt'),
+      ['222'],
+      'Eine Lehrerin fragt vor einer Klassenfahrt nach London die Vorerkrankungen nicht ab; eine Schülerin mit Diabetes stirbt. Lehrkräfte müssen bei Auslandsfahrten den sichersten Weg wählen und Vorerkrankungen schriftlich abfragen; das Unterlassen begründet fahrlässige Tötung durch Unterlassen (§§ 222, 13). Zusätzlich: Eine nur teilweise im Inland begangene Tat ist eine Inlandstat.'),
+
+    /* ------------------------------------------------ Körperverletzung */
+    eg('eg_zahn', 'Die Zahnextraktionszange',
+      'OLG Karlsruhe, Beschl. v. 16.3.2022 – 1 Ws 47/22 (BeckRS 2022, 6691)', 'Maximilian Nussbaum', U('die-zahnextraktionszange'),
+      ['223', '224'],
+      'Eine Zahnärztin redet einem Patienten eine medizinisch nicht erforderliche Extraktion ein, um eine teure Prothetik anzubieten. Die Einwilligung ist wegen des Willensmangels über die Indikation unwirksam. Im Streit steht, ob ein bestimmungsgemäß eingesetztes ärztliches Instrument ein „gefährliches Werkzeug“ ist: Die Falllösung lehnt einen dogmatischen Sonderweg ab und bejaht § 224 Abs. 1 Nr. 2, jedenfalls wenn es zu erheblichen Verletzungen kommt. Daneben: Heileingriff – Tatbestands- oder Einwilligungslösung.'),
+    eg('eg_ko', 'K.O. Tropfen im Drink',
+      'BGH, Beschl. v. 8.10.2024 – 5 StR 382/24 (NJW 2024, 3735)', 'Antonia Cohrs', U('k-o-tropfen-im-drink'),
+      ['224'],
+      'Ein Mann mischt seiner Verlobten und deren Freundin heimlich K.O.-Tropfen in ein Getränk. Flüssigkeiten sind nach allgemeinem Sprachgebrauch keine „Werkzeuge“ – die Wortlautgrenze (Art. 103 Abs. 2 GG) verbietet eine erweiternde Auslegung, auch die Pipette zur Dosierung genügt nicht. Die Strafbarkeit beurteilt sich stattdessen nach den übrigen Varianten des § 224 (u. a. „andere gesundheitsschädliche Stoffe“).'),
+    eg('eg_boxer', 'Gedopter Boxer',
+      'OLG Köln, Beschl. v. 4.4.2019 – 2 Ws 122/19 (JR 2020, 322)', 'Maximilian Nussbaum', U('gedopter-boxer-2'),
+      ['223', '224', '228'],
+      'Ein Profiboxer gewinnt einen Kampf unter Dopingeinfluss, von dem der Gegner nichts wusste. Straflosigkeit im Kampfsport folgt nach (noch) h. M. nicht aus dem Tatbestand, sondern aus einer rechtfertigenden Einwilligung; § 228 markiert deren Grenze (Sittenwidrigkeit orientiert sich an der konkreten Gefährlichkeit). Diskutiert wird, ob der Irrtum über das Doping ein beachtlicher Willensmangel ist und ob Boxhandschuhe „gefährliche Werkzeuge“ sein können.'),
+    eg('eg_umsich', 'Der um-sich-schlagende Täter',
+      'BayObLG, Beschl. v. 24.7.2020 – 205 StRR 216/20 (NStZ 2020, 736); vgl. BGH, Urt. v. 14.1.2021 – 4 StR 95/20 (NJW 2021, 795)', 'Antonia Cohrs', U('der-um-sich-schlagende-taeter'),
+      ['223', '224'],
+      'Der Täter schlägt mit einem Hammer in Richtung zweier nebeneinander stehender Personen und nimmt in Kauf, dass beide getroffen werden; verletzt wird nur eine. Alternativvorsatz: Rechnet der Täter nur mit einem von mehreren möglichen Erfolgen, nimmt die h. M. Vorsatz für alle in Betracht kommenden Delikte an; Wertungswidersprüche werden auf Konkurrenzebene gelöst.'),
+    eg('eg_pfleger', 'Der verantwortungsvolle Pfleger',
+      'BGH, Beschl. v. 26.5.2020 – 2 StR 434/19 (NStZ 2021, 164)', 'Maximilian Nussbaum', U('der-verantwortungsvolle-pfleger'),
+      ['223', '224', '228', '216'],
+      'Ein Altenpfleger gibt einem sterbenden Krebspatienten entgegen der ärztlichen Anordnung die doppelte Morphindosis. Für die Einwilligung (hier: mutmaßliche) kommt es nicht darauf an, ob Arzt oder Pfleger handelt; eine Überschreitung der Verordnung kann gedeckt sein, wenn sie noch medizinisch vertretbar ist. Das schmerzfreie Sterben ist ein anerkennenswerter Zweck, sodass trotz Lebensgefahr keine Sittenwidrigkeit nach § 228 vorliegt (indirekte Sterbehilfe).'),
+    eg('eg_jva', 'Prügelei in der JVA',
+      'BGH, Beschl. v. 26.1.2021 – 1 StR 463/20 (BeckRS 2021, 794)', '', U('pruegelei-in-der-jva'),
+      ['228', '223', '224', '227'],
+      'Zwei Häftlinge vereinbaren eine Prügelei; ein Faustschlag führt zum Tod. In eine Körperverletzung kann trotz § 228 eingewilligt werden, solange schwere oder tödliche Verletzungen nicht zu erwarten sind. Die abstrakte Eskalationsgefahr unter vielen Gefangenen macht die Vereinbarung nicht allein sittenwidrig. Außerdem: Eine vollendete Qualifikationsvariante verdrängt den Versuch einer weiteren Variante derselben Tat.'),
+    eg('eg_tattoo', 'Gesichtstattoo wider Willen',
+      'BGH, Urt. v. 10.4.2025 – 4 StR 495/24; BGH, Beschl. v. 7.1.2025 – 6 StR 481/24', '', U('gesichtstattoo'),
+      ['224', '226'],
+      'Ein Täter tätowiert einem anderen ohne Einwilligung ein Wort ins Gesicht (Entstellung, § 226 Abs. 1 Nr. 3); in einer Abwandlung wird mit einer vorgehaltenen Pistole gedroht. „Mittels“ einer Waffe (§ 224 Abs. 1 Nr. 2) erfolgt die Körperverletzung nicht, wenn die Waffe nur zur Verstärkung der Drohung dient und nicht unmittelbar auf den Körper einwirkt. „Gemeinschaftlich“ (Nr. 4) fehlt, wenn jeder Täter nur einem anderen Opfer gegenübertritt.'),
+    eg('eg_op', 'Operationsverweigerer',
+      'BGH, Urt. v. 7.2.2017 – 5 StR 483/16 (NJW 2017, 1763)', '', U('operationsverweigerer'),
+      ['226', '224'],
+      'Nach einem Messerangriff lehnt das Opfer zumutbare Nachbehandlungen ab, die Hand bleibt dauerhaft beeinträchtigt. Es stellt sich die Frage, ob der gefahrspezifische Zusammenhang zur schweren Folge des § 226 besteht: Die Rechtsprechung will das Opferverhalten grundsätzlich unberücksichtigt lassen, die h. L. wendet die Zurechnungsgrundsätze an und verneint ihn bei zumutbarer Nachbehandlung.'),
+    eg('eg_verw', 'Folgenschwere Verwechslung',
+      'BGH, Beschl. v. 17.4.2024 – 1 StR 403/23 (NStZ 2024, 611)', '', U('folgenschwere-verwechslung'),
+      ['226'],
+      'Eine Ärztin sterilisiert wegen einer Verwechslung den falschen Patienten und leitet danach eine Refertilisierung ein. „Längere Dauer“ der schweren Folge des § 226 Abs. 1 verlangt keine Dauerhaftigkeit. Für die Freiwilligkeit des Rücktritts zählt der Rücktrittshorizont nach der letzten Ausführungshandlung, nicht die ursprüngliche Tatplanperspektive; ein erkannter error in persona schließt den Rücktritt nicht automatisch aus. Vgl. dazu die ZJS-Besprechung von Zieschang (ZJS 4/2024).'),
+
+    /* ------------------------------------------------ Erfolgsqualifikation / Schlägerei */
+    eg('eg_macht', 'Die Macht der Wahrnehmung',
+      'BGH, Urt. v. 7.8.2024 – 1 StR 430/23 (BeckRS 2024, 23365)', '', U('die-macht-der-wahrnehmung'),
+      ['227', '231', '224'],
+      'Eine Gruppe überfällt ein aussteigendes Mitglied; einer sticht ihn mit einem Messer nieder, die anderen schlagen mit Fäusten bzw. einem Schlagstock zu. Mittäter können nach § 227 haften, wenn der Tod aus einem Exzess folgt – aber nur, wenn die spezifische Todesgefahr schon in den gemeinsam verübten Gewalthandlungen angelegt war. Für Beteiligte, die vom Messer nichts wussten, bleibt es bei § 224 und § 231. Zusatzfragen: Beweisantrag (Polygraph) und § 224 Abs. 1 Nr. 4 bei nur einem Täter am Tatort.')
+  ]);
+})();
+
+</script>
+<script>
+/* Normfenster – Prototyp. Reines JavaScript, keine Abhängigkeiten, läuft auch per file://. */
+(function () {
+'use strict';
+
+const META = window.STGB_META;
+const STORE_KEY = 'normfenster.v1';
+const MAXPANES = 3;
+const READ_SECS = 20;           // ab so vielen Sekunden Verweildauer gilt eine Norm als „gelesen“
+
+/* ================================================================ Helpers */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const sortKey = id => { const m = /^(\d+)([a-z]?)$/.exec(id); return m ? +m[1] * 100 + (m[2] ? m[2].charCodeAt(0) - 96 : 0) : 0; };
+const inRange = (id, a, b) => sortKey(id) >= sortKey(a) && sortKey(id) <= sortKey(b);
+const par = id => '§ ' + id;
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+const ICON = {
+  star:  '<svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.8L12 3.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  starOn:'<svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.8L12 3.5z" fill="var(--star)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  starMini:'<span class="star" role="img" aria-label="Lesezeichen" title="Lesezeichen"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.8L12 3.5z" fill="var(--star)" stroke="var(--ink)" stroke-width="1.5" stroke-linejoin="round"/></svg></span>',
+  close: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+  solo:  '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  copy:  '<svg viewBox="0 0 24 24" width="16" height="16"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
+};
+
+/* ================================================================ Gesetz parsen */
+function parseLaw(raw) {
+  const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(l => l && l !== '-');
+  const norms = {}, order = [], sections = [];
+  let section = null, curList = [], foot = false;
+
+  const classify = line => {
+    let m;
+    if ((m = /^\((\d+[a-z]?)\)\s+(.*)$/.exec(line))) return { t: 'abs', n: m[1], text: m[2] };
+    if ((m = /^(\d+)\.\s+(.*)$/.exec(line)))         return { t: 'nr',  n: m[1], text: m[2] };
+    if ((m = /^>\s*(.*)$/.exec(line)))                return { t: 'grp', text: m[1] };
+    return { t: 'txt', text: line };
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    let m;
+    if ((m = /^(\S+) Abschnitt$/.exec(line))) {
+      section = { label: m[1], nr: META.sectionNr[m[1]] || sections.length + 1, title: lines[++i], norms: [] };
+      sections.push(section); curList = []; foot = false; continue;
+    }
+    if (line === 'Fußnote') { foot = true; continue; }
+    if (line.startsWith('§')) {
+      if (foot && line.includes(':')) { curList.forEach(n => n.foot.push(line)); continue; }
+      const h = /^§§? (\d+[a-z]?)(?: und (\d+[a-z]?))?\s*(.*)$/.exec(line);
+      if (!h) continue;
+      const gone = h[3] === '(weggefallen)';
+      curList = [h[1], h[2]].filter(Boolean).map(id => {
+        const n = { id, title: gone ? '(weggefallen)' : h[3], gone, blocks: [], foot: [], section };
+        norms[id] = n; order.push(id); section.norms.push(id); return n;
+      });
+      foot = false; continue;
+    }
+    if (foot) { curList.forEach(n => { n.foot[n.foot.length - 1] += ' ' + line; }); continue; }
+    const blk = classify(line);
+    curList.forEach(n => n.blocks.push(blk));
+  }
+  order.forEach(id => { const n = norms[id]; n.plain = n.blocks.map(b => b.text).join(' ').toLowerCase(); });
+  sections.forEach(s => { s.first = s.norms[0]; s.last = s.norms[s.norms.length - 1]; });
+  return { norms, order, sections };
+}
+const LAW = parseLaw(window.RAW_STGB);
+const M = id => META.norms[id] || null;
+
+// Rückwärts-Graph: welche Normen verlinken (per Tag) auf id?
+const REV = {};
+Object.keys(META.norms).forEach(src => META.norms[src].tags.forEach(([t]) => { (REV[t] = REV[t] || []).push(src); }));
+
+/* ================================================================ State */
+const DEFAULT = {
+  settings: {
+    linkMode: 'split', explain: true, defs: true, fs: 16, left: true, right: true, showGone: false,
+    role: 'student', roleChosen: false,
+    // Literatur-Kategorien je Rolle (An/Aus)
+    litCats: { student: { kommentar: true, lehrbuch: true, aufsatz: true, fall: true }, pro: { kommentar: true, lehrbuch: false, aufsatz: true, fall: false } }
+  },
+  history: [], stats: {}, bookmarks: [], customDefs: {}, customTags: {}, notes: {}, finds: {}, last: null
+};
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (s) return Object.assign({}, DEFAULT, s, { settings: Object.assign({}, DEFAULT.settings, s.settings) });
+  } catch (e) { /* Storage nicht verfügbar */ }
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+let S = loadState();
+let storageOk = true;
+const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { storageOk = false; } };
+const saveSoon = debounce(save, 400);
+
+const ui = { panes: [], focus: 0, leftTab: 'history', extraFilter: 'all', activeAbs: null };
+
+/* ---- Rolle: Studium vs. Praxis ---------------------------------------------------------
+   Studium: Lernhilfen (Kurz erklärt, Begriffe, Lernstand, Prüfungsrelevanz), Aufsätze/Übungs-/Examensfälle zuerst.
+   Praxis : ruhiger Text, Kommentare + aktuelle Rechtsprechung zuerst, Fußnoten offen, kein Lernstand-Tracking. */
+const role = () => (S.settings.role === 'pro' ? 'pro' : 'student');
+const ROLE_PRESET = { student: { explain: true, defs: true }, pro: { explain: false, defs: false } };
+const LIT_CATS = [['kommentar', 'Kommentare'], ['lehrbuch', 'Lehrbücher'], ['aufsatz', 'Aufsätze und Anmerkungen'], ['fall', 'Übungs- und Examensfälle']];
+function litCats() {
+  const d = DEFAULT.settings.litCats[role()];
+  return Object.assign({}, d, (S.settings.litCats || {})[role()]);
+}
+function applyRole(r, quiet) {
+  S.settings.role = r; S.settings.roleChosen = true;
+  Object.assign(S.settings, ROLE_PRESET[r]);
+  if (r === 'pro' && ui.leftTab === 'learn') ui.leftTab = 'history';
+  save(); closeModal(); renderAll();
+  if (!quiet) toast(r === 'pro'
+    ? 'Praxis-Ansicht: Kommentare und aktuelle Rechtsprechung zuerst, Lernhilfen und Lernstand ausgeblendet.'
+    : 'Studium-Ansicht: Lernhilfen, Lernstand sowie Aufsätze und Fälle zur Ausbildung eingeblendet.');
+}
+const stat = id => (S.stats[id] = S.stats[id] || { visits: 0, secs: 0, last: 0 });
+const focusId = () => ui.panes[ui.focus];
+
+/* ================================================================ Definitionen / Begriffe */
+const DEFBY = {}; META.defs.forEach(d => { DEFBY[d.key] = d; });
+let TERM_CACHE = {};
+function custPat(term) {
+  const c = term.charAt(0);
+  const first = /\p{L}/u.test(c) ? '[' + c.toLowerCase() + c.toUpperCase() + ']' : escRe(c);
+  return first + escRe(term.slice(1));
+}
+function buildTerms() { TERM_CACHE = {}; }
+// Begriffe gelten je Norm (def.in); eigene Definitionen gelten in allen Normen.
+function termSet(nid) {
+  if (TERM_CACHE[nid]) return TERM_CACHE[nid];
+  const terms = META.defs.filter(d => !d.in || d.in.includes(nid)).map(d => ({ key: d.key, pat: d.pat }));
+  Object.entries(S.customDefs).forEach(([key, c]) => { if (!DEFBY[key] && c.term) terms.push({ key, pat: custPat(c.term) }); });
+  terms.sort((a, b) => b.pat.length - a.pat.length);
+  const re = terms.length ? new RegExp('(?<![\\p{L}\\p{N}])(?:' + terms.map(t => '(' + t.pat + ')').join('|') + ')(?![\\p{L}\\p{N}])', 'gu') : null;
+  return (TERM_CACHE[nid] = { terms, re });
+}
+function termify(str, nid) {
+  const { terms: TERMS, re: TERM_RE } = termSet(nid);
+  if (!TERM_RE || !S.settings.defs) return esc(str);
+  let out = '', last = 0, m;
+  TERM_RE.lastIndex = 0;
+  while ((m = TERM_RE.exec(str))) {
+    const gi = m.findIndex((g, i) => i > 0 && g !== undefined) - 1;
+    const key = TERMS[gi].key;
+    out += esc(str.slice(last, m.index));
+    out += '<span class="term' + (S.customDefs[key] ? ' own' : '') + '" data-term="' + esc(key) + '" tabindex="0">' + esc(m[0]) + '</span>';
+    last = m.index + m[0].length;
+    if (m[0].length === 0) TERM_RE.lastIndex++;
+  }
+  return out + esc(str.slice(last));
+}
+
+/* ================================================================ Smart Cross References */
+const REF_RE = /§§?\s*\d+[a-z]?(?:\s+(?:Abs\.|Absatz|Satz|Nr\.)\s*\d+[a-z]?)*(?:\s*(?:,|bis|und|oder)\s+(?:§\s*)?\d+[a-z]?(?:\s+(?:Abs\.|Absatz|Satz|Nr\.)\s*\d+[a-z]?)*)*/g;
+
+function refAnchor(label, id, abs) {
+  if (LAW.norms[id]) {
+    return '<a class="xref" href="#/stgb/' + esc(id) + '" data-norm="' + esc(id) + '"' + (abs ? ' data-abs="' + esc(abs) + '"' : '') + '>' + esc(label) + '</a>';
+  }
+  return '<a class="xref ext" href="' + esc(META.law.extUrl(id)) + '" target="_blank" rel="noopener" data-ext="' + esc(id) + '" title="' + esc(par(id)) + ' ist nicht im Beispieltext – öffnet gesetze-im-internet.de">' + esc(label) + '</a>';
+}
+function linkChunk(chunk) {
+  const T = /§§?|Abs\.|Absatz|Satz|Nr\.|\d+[a-z]?|bis|und|oder|,/g;
+  const refs = []; let ctx = 'norm', sub = '', symStart = null, last = null, m;
+  while ((m = T.exec(chunk))) {
+    const t = m[0];
+    if (t.charAt(0) === '§') { symStart = m.index; ctx = 'norm'; }
+    else if (t === 'Abs.' || t === 'Absatz') { ctx = 'sub'; sub = 'abs'; }
+    else if (t === 'Satz' || t === 'Nr.') { ctx = 'sub'; sub = 'other'; }
+    else if (/^\d/.test(t)) {
+      if (ctx === 'norm') {
+        last = { start: symStart !== null ? symStart : m.index, end: m.index + t.length, id: t, abs: null };
+        symStart = null; refs.push(last);
+      } else if (sub === 'abs' && last && last.abs === null) last.abs = t;
+    }
+  }
+  let out = '', pos = 0;
+  refs.forEach(r => { out += esc(chunk.slice(pos, r.start)) + refAnchor(chunk.slice(r.start, r.end), r.id, r.abs); pos = r.end; });
+  return out + esc(chunk.slice(pos));
+}
+function renderText(s, withTerms, nid) {
+  const plain = withTerms ? (x => termify(x, nid)) : esc;
+  let out = '', last = 0, m;
+  REF_RE.lastIndex = 0;
+  while ((m = REF_RE.exec(s))) {
+    out += plain(s.slice(last, m.index)) + linkChunk(m[0]);
+    last = m.index + m[0].length;
+  }
+  return out + plain(s.slice(last));
+}
+const bold = html => html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+/* ================================================================ Einordnung (Breadcrumb) */
+function pathFor(id) {
+  const n = LAW.norms[id], p = [];
+  p.push({ lvl: 'Gesetz', label: META.law.name + ' (' + META.law.abbr + ')' });
+  META.parts.filter(x => inRange(id, x.from, x.to)).forEach(x => p.push({ lvl: 'Teil', label: x.label, rng: '§§ ' + x.from + '–' + x.to }));
+  const s = n.section;
+  p.push({ lvl: 'Abschnitt', label: s.nr + '. Abschnitt – ' + s.title, rng: '§§ ' + s.first + '–' + s.last, go: s.first });
+  META.titles.filter(x => inRange(id, x.from, x.to)).forEach(x => p.push({ lvl: 'Titel', label: x.label, rng: '§§ ' + x.from + '–' + x.to, go: x.from }));
+  p.push({ lvl: 'Norm', label: par(id) + ' ' + n.title, cur: true });
+  return p;
+}
+function renderCrumbs() {
+  const id = focusId(); if (!id) return;
+  $('#crumbs').innerHTML = pathFor(id).map((c, i) => {
+    const inner = '<span class="lvl">' + esc(c.lvl) + '</span><span>' + esc(c.label) + '</span>' + (c.rng ? '<span class="rng">(' + esc(c.rng) + ')</span>' : '');
+    const el = c.go && LAW.norms[c.go]
+      ? '<button class="crumb" data-go="' + esc(c.go) + '" title="Zum ersten Eintrag dieses Abschnitts">' + inner + '</button>'
+      : '<span class="crumb' + (c.cur ? ' cur' : '') + '">' + inner + '</span>';
+    return (i ? '<span class="crumb-sep" aria-hidden="true">›</span>' : '') + el;
+  }).join('');
+}
+
+/* ================================================================ Navigation */
+function focusedPaneFromEl(el) { const p = el && el.closest ? el.closest('.pane') : null; return p ? +p.dataset.idx : ui.focus; }
+
+function go(id, o = {}) {
+  if (!LAW.norms[id]) return;
+  ui.activeAbs = o.abs || null;
+  const from = o.from !== undefined ? o.from : ui.focus;
+  const ex = ui.panes.indexOf(id);
+  if (ex >= 0) { setFocus(ex, true); return; }
+  if (!ui.panes.length) { ui.panes = [id]; ui.focus = 0; }
+  else if (o.mode === 'split') {
+    if (ui.panes.length < MAXPANES) { ui.panes.splice(from + 1, 0, id); ui.focus = from + 1; }
+    else { const t = from < ui.panes.length - 1 ? from + 1 : from - 1; ui.panes[t] = id; ui.focus = t; }
+  } else { ui.panes[ui.focus] = id; }
+  afterNav(id);
+}
+function afterNav(id) {
+  recordVisit(id);
+  persistLast();
+  renderPanes(); renderChrome();
+  flashAbs();
+}
+function setFocus(i, forceRender) {
+  if (i === ui.focus && !forceRender) return;
+  ui.focus = i;
+  recordVisit(focusId());
+  persistLast();
+  $$('.pane').forEach((p, k) => p.classList.toggle('focused', k === i));
+  renderChrome();
+  if (ui.activeAbs) flashAbs();
+}
+function closePane(i) {
+  if (ui.panes.length < 2) return;
+  ui.panes.splice(i, 1);
+  if (i < ui.focus) ui.focus--; else if (i === ui.focus) ui.focus = Math.min(i, ui.panes.length - 1);
+  persistLast(); renderPanes(); renderChrome();
+}
+function soloPane(i) { ui.panes = [ui.panes[i]]; ui.focus = 0; persistLast(); renderPanes(); renderChrome(); }
+function persistLast() { S.last = { panes: ui.panes.slice(), focus: ui.focus }; save(); try { history.replaceState(null, '', '#/stgb/' + ui.panes.join(',')); } catch (e) { /* file:// ohne History-API */ } }
+
+function recordVisit(id) {
+  if (!id) return;
+  const now = Date.now();
+  S.history = S.history.filter(h => h.id !== id);
+  S.history.unshift({ id, ts: now });
+  if (S.history.length > 200) S.history.length = 200;
+  const st = stat(id); st.visits++; st.last = now;
+  save();
+}
+
+function flashAbs() {
+  if (!ui.activeAbs) return;
+  const pane = $$('.pane')[ui.focus]; if (!pane) return;
+  const el = $('[data-abs="' + ui.activeAbs + '"]', pane);
+  ui.activeAbs = null;
+  if (el) { el.scrollIntoView({ block: 'center' }); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+}
+
+/* ================================================================ Rendering: Panes */
+function blocksHTML(n) {
+  let hasAbs = false;
+  return n.blocks.map(b => {
+    const t = renderText(b.text, true, n.id);
+    if (b.t === 'abs') { hasAbs = true; return '<p class="blk abs" data-abs="' + esc(b.n) + '"><button class="abs-n" data-cite="' + esc(par(n.id) + ' Abs. ' + b.n + ' ' + META.law.abbr) + '" aria-label="Zitat kopieren: ' + esc(par(n.id) + ' Abs. ' + b.n) + '" title="Klicken: Zitat kopieren">(' + esc(b.n) + ')</button><span>' + t + '</span></p>'; }
+    if (b.t === 'nr')  return '<p class="blk nr"><span class="nn">' + esc(b.n) + '.</span><span>' + t + '</span></p>';
+    if (b.t === 'grp') return '<p class="blk grp">' + t + '</p>';
+    return '<p class="blk txt' + (hasAbs ? ' cont' : '') + '">' + t + '</p>';
+  }).join('');
+}
+function paneHTML(id, i) {
+  const n = LAW.norms[id], m = M(id), bm = S.bookmarks.includes(id);
+  const kurz = S.settings.explain && m && m.kurz
+    ? '<details class="explain jf-note jf-note--info"><summary class="jf-note__label">Kurz erklärt</summary><p class="jf-note__body">' + bold(renderText(m.kurz, false)) + '</p></details>' : '';
+  const gone = n.gone ? '<p class="gone-note">Diese Norm ist weggefallen.</p>' : '';
+  const foot = n.foot.length
+    ? '<details class="foot"' + (role() === 'pro' ? ' open' : '') + '><summary>Fußnote' + (n.foot.length > 1 ? 'n (' + n.foot.length + ')' : '') + '</summary>' + n.foot.map(f => '<p>' + esc(f) + '</p>').join('') + '</details>' : '';
+  return '<article class="pane' + (i === ui.focus ? ' focused' : '') + '" data-idx="' + i + '" data-id="' + esc(id) + '">' +
+    '<header class="pane-head"><div class="pane-title"><span class="pane-par">' + par(id) + '</span><h2>' + esc(n.title) + '</h2></div>' +
+    '<div class="pane-actions">' +
+      '<button data-act="bm" class="' + (bm ? 'on' : '') + '" aria-pressed="' + bm + '" aria-label="Lesezeichen für ' + par(id) + '" title="' + (bm ? 'Lesezeichen entfernen' : 'Lesezeichen setzen') + '">' + (bm ? ICON.starOn : ICON.star) + '</button>' +
+      '<button data-act="copy" aria-label="Zitat kopieren" title="Zitat kopieren (' + par(id) + ' ' + META.law.abbr + ')">' + ICON.copy + '</button>' +
+      (ui.panes.length > 1 ? '<button data-act="solo" aria-label="Nur diese Norm anzeigen" title="Nur diese Norm anzeigen">' + ICON.solo + '</button><button data-act="close" aria-label="Norm schließen" title="Schließen">' + ICON.close + '</button>' : '') +
+    '</div></header>' +
+    '<div class="pane-body ' + (S.settings.defs ? '' : 'nodefs') + '">' + kurz + gone + blocksHTML(n) + foot + '</div></article>';
+}
+function renderPanes() {
+  const wrap = $('#panes');
+  const sc = {}; $$('.pane', wrap).forEach(p => { sc[p.dataset.id] = $('.pane-body', p).scrollTop; });
+  wrap.dataset.count = ui.panes.length;
+  wrap.innerHTML = ui.panes.map(paneHTML).join('');
+  $$('.pane', wrap).forEach(p => { const b = $('.pane-body', p); if (sc[p.dataset.id]) { b.style.scrollBehavior = 'auto'; b.scrollTop = sc[p.dataset.id]; b.style.scrollBehavior = ''; } });
+}
+
+/* ================================================================ Rendering: Chrome */
+const ago = ts => {
+  const d = (Date.now() - ts) / 1000;
+  if (d < 60) return 'gerade eben';
+  if (d < 3600) return 'vor ' + Math.round(d / 60) + ' Min.';
+  if (d < 86400) return 'vor ' + Math.round(d / 3600) + ' Std.';
+  return new Date(ts).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+};
+const dayLabel = ts => {
+  const a = new Date(ts); a.setHours(0, 0, 0, 0); const b = new Date(); b.setHours(0, 0, 0, 0);
+  const diff = Math.round((b - a) / 86400000);
+  return diff === 0 ? 'Heute' : diff === 1 ? 'Gestern' : 'Früher';
+};
+const fmtSecs = s => s < 60 ? s + ' Sek.' : Math.round(s / 60) + ' Min.';
+
+function renderLeft() {
+  const el = $('#left');
+  const tabs = [['history', 'Verlauf'], ['bm', 'Lesezeichen']].concat(role() === 'student' ? [['learn', 'Lernstand']] : []);
+  if (!tabs.some(t => t[0] === ui.leftTab)) ui.leftTab = 'history';
+  let body = '', foot = '';
+  if (ui.leftTab === 'history') {
+    const cur = focusId();
+    if (!S.history.length) body = '<div class="empty-note">Noch kein Verlauf.<br>Hier erscheinen die Normen, die du geöffnet hast – die zuletzt gelesene oben.</div>';
+    else {
+      let lastGroup = '';
+      body = S.history.map((h, i) => {
+        const n = LAW.norms[h.id]; if (!n) return '';
+        const g = dayLabel(h.ts); const gl = g !== lastGroup ? '<div class="group-label">' + g + '</div>' : ''; lastGroup = g;
+        const flag = h.id === cur ? '<span class="badge-now">aktuell</span>' : (i === 0 || (i === 1 && S.history[0].id === cur)) ? '<span class="badge-last">zuletzt</span>' : '';
+        return gl + '<a class="nrow' + (h.id === cur ? ' cur' : '') + (ui.panes.includes(h.id) ? ' open' : '') + '" href="#/stgb/' + h.id + '" data-nav="' + h.id + '">' +
+          '<span class="n">' + par(h.id) + '</span><span class="t">' + esc(n.title) + flag + '</span><span class="m">' + (S.bookmarks.includes(h.id) ? ICON.starMini : '') + '</span>' +
+          '<span class="sub">' + ago(h.ts) + ' · ' + (stat(h.id).visits) + '× geöffnet</span></a>';
+      }).join('');
+    }
+    foot = '<span>' + S.history.length + ' Normen</span><button class="link-btn" data-act="clear-history">Verlauf leeren</button>';
+  } else if (ui.leftTab === 'bm') {
+    body = S.bookmarks.length ? S.bookmarks.map(id => {
+      const n = LAW.norms[id]; if (!n) return '';
+      return '<a class="nrow' + (id === focusId() ? ' cur' : '') + '" href="#/stgb/' + id + '" data-nav="' + id + '"><span class="n">' + par(id) + '</span><span class="t">' + esc(n.title) + '</span>' +
+        '<span class="m"><button class="link-btn" data-unbm="' + id + '" aria-label="Lesezeichen für ' + par(id) + ' entfernen" title="Lesezeichen entfernen"><span aria-hidden="true">×</span></button></span></a>';
+    }).join('') : '<div class="empty-note">Noch keine Lesezeichen.<br>Markiere wichtige Normen mit dem Stern ☆ in der Kopfzeile einer Norm.</div>';
+    foot = '<span>' + S.bookmarks.length + ' Lesezeichen</span><span></span>';
+  } else body = renderLearn();
+  el.innerHTML = '<div class="tabs" role="tablist">' + tabs.map(([k, l]) => '<button role="tab" aria-selected="' + (ui.leftTab === k) + '" data-tab="' + k + '" class="' + (ui.leftTab === k ? 'on' : '') + '">' + l + (k === 'bm' && S.bookmarks.length ? '<i>' + S.bookmarks.length + '</i>' : '') + '</button>').join('') + '</div>' +
+    '<div class="side-body">' + body + '</div>' + (foot ? '<div class="side-foot">' + foot + '</div>' : '');
+}
+
+// Vorheriger / folgender Abschnitt: im Beispieltext vorhanden → klickbar, sonst nur als Stub (deaktiviert)
+function sectionNeighbor(sec, dir) {
+  const nr = sec.nr + (dir === 'prev' ? -1 : 1);
+  const real = LAW.sections.find(s => s.nr === nr);
+  if (real) return { nr, title: real.title, range: '§§ ' + real.first + '–' + real.last, go: real.first };
+  const stub = META.sectionStubs && META.sectionStubs[nr];
+  return stub ? { nr, title: stub.title, range: stub.range, go: null } : null;
+}
+function secNavHTML(sec, dir) {
+  const n = sectionNeighbor(sec, dir); if (!n) return '';
+  const lbl = dir === 'prev' ? '↑ Vorheriger Abschnitt' : '↓ Folgender Abschnitt';
+  return '<button class="sec-nav ' + dir + '"' + (n.go ? ' data-secgo="' + n.go + '"' : ' disabled title="Dieser Abschnitt ist nicht im Beispieltext enthalten"') + '>' +
+    '<span class="sn-l">' + lbl + '</span><span class="sn-t">' + n.nr + '. Abschnitt – ' + esc(n.title) + '</span><span class="sn-r">' + esc(n.range) + (n.go ? '' : ' · nicht im Beispieltext') + '</span></button>';
+}
+function renderRight() {
+  const id = focusId(); if (!id) return;
+  const sec = LAW.norms[id].section;
+  const goneCount = sec.norms.filter(x => LAW.norms[x].gone).length;
+  const list = sec.norms.filter(x => S.settings.showGone || !LAW.norms[x].gone);
+  $('#right').innerHTML =
+    '<div class="side-head"><div class="eyebrow">' + sec.nr + '. Abschnitt</div><h3>' + esc(sec.title) + '</h3></div>' +
+    secNavHTML(sec, 'prev') +
+    '<div class="side-body">' + list.map(x => {
+      const n = LAW.norms[x];
+      return '<a class="nrow' + (x === id ? ' cur' : '') + (ui.panes.includes(x) ? ' open' : '') + (n.gone ? ' gone' : '') + '" href="#/stgb/' + x + '" data-nav="' + x + '">' +
+        '<span class="n">' + par(x) + '</span><span class="t">' + esc(n.title) + (S.bookmarks.includes(x) ? ICON.starMini : '') + '</span>' +
+        '<span class="m">' + (role() === 'student' && !n.gone && M(x) ? '<span class="pips" role="img" aria-label="Prüfungsrelevanz ' + M(x).imp + ' von 5" title="Prüfungsrelevanz ' + M(x).imp + ' von 5">' + '●'.repeat(M(x).imp) + '<i>' + '●'.repeat(5 - M(x).imp) + '</i></span>' : '') +
+        (stat(x).visits && !n.gone ? '<span class="dot" role="img" aria-label="schon besucht" title="schon besucht"></span>' : '') + '</span></a>';
+    }).join('') + '</div>' +
+    secNavHTML(sec, 'next') +
+    '<div class="side-foot"><span>' + (sec.norms.length - goneCount) + ' Normen' + (goneCount ? ' · ' + goneCount + ' weggefallen' : '') + '</span>' +
+    (goneCount ? '<button class="link-btn" data-act="toggle-gone">' + (S.settings.showGone ? 'ausblenden' : 'anzeigen') + '</button>' : '') + '</div>';
+  const cur = $('.nrow.cur', $('#right')); if (cur) cur.scrollIntoView({ block: 'nearest' });
+}
+
+function renderTags() {
+  const id = focusId(); if (!id) return;
+  const base = (M(id) ? M(id).tags : []).map(([n, l]) => ({ n, l, own: false }));
+  const own = (S.customTags[id] || []).map((t, i) => ({ n: t.n, l: t.l, own: true, i }));
+  const chip = t => {
+    const inSet = !!LAW.norms[t.n];
+    const label = '<b>' + par(t.n) + '</b>' + (t.l ? '<small>' + esc(t.l) + '</small>' : '');
+    const x = t.own ? '<span class="x" data-deltag="' + t.i + '" title="Tag entfernen">×</span>' : '';
+    if (inSet) return '<a class="chip' + (t.own ? ' own' : '') + (ui.panes.includes(t.n) ? ' openp' : '') + '" href="#/stgb/' + t.n + '" data-norm="' + t.n + '">' + label + x + '</a>';
+    return '<a class="chip ext' + (t.own ? ' own' : '') + '" href="' + esc(META.law.extUrl(t.n)) + '" target="_blank" rel="noopener" title="Nicht im Beispieltext – öffnet gesetze-im-internet.de">' + label + '<span class="x" style="pointer-events:none">↗</span>' + x + '</a>';
+  };
+  $('#tagbar').innerHTML = '<span class="lbl">' + (role() === 'pro' ? 'Verwandte Normen' : 'Cross-Check') + '</span>' + base.concat(own).map(chip).join('') +
+    '<button class="chip chip-add" data-act="add-tag" title="Eigenen Norm-Tag hinzufügen">+ Tag</button>';
+}
+
+const articlesFor = id => (META.articles || []).filter(a => a.norms.includes(id));
+const yearOf = s => { const m = String(s || '').match(/(?:19|20)\d{2}/g); return m ? Math.max.apply(null, m.map(Number)) : 0; };
+const catOfArticle = a => (a.kind === 'Übungsfall' || a.kind === 'Examensfall') ? 'fall' : 'aufsatz';
+const catOfGeneral = r => r.type === 'Kommentar' ? 'kommentar' : r.type === 'Lehrbuch' ? 'lehrbuch' : 'aufsatz';
+// Reihenfolge der Kategorien je Rolle (kleiner = weiter oben)
+const RANK = { student: { aufsatz: 0, fall: 1, lehrbuch: 2, kommentar: 3 }, pro: { kommentar: 0, aufsatz: 1, lehrbuch: 2, fall: 3 } };
+function extraCounts(id) {
+  const m = M(id) || { rspr: [], lit: [] };
+  const mine = S.finds[id] || [];
+  return {
+    rspr: m.rspr.length + mine.filter(f => f.kind === 'rspr').length,
+    lit: articlesFor(id).length + m.lit.length + META.litGeneral.length + mine.filter(f => f.kind === 'lit').length
+  };
+}
+function renderHint() {
+  const id = focusId(); if (!id) return;
+  const c = extraCounts(id);
+  $('#hintbar').innerHTML = '<span>Rechtsprechung (' + c.rspr + ') · Literatur (' + c.lit + ') · Notizen zu ' + par(id) + '</span><span class="arrow">↓</span><span>weiterscrollen</span>';
+}
+function renderExtra() {
+  const id = focusId(); if (!id) return;
+  const n = LAW.norms[id], m = M(id) || { rspr: [], lit: [] };
+  const mine = S.finds[id] || [];
+  const f = ui.extraFilter;
+  const isPro = role() === 'pro';
+  const del = i => '<button class="del" data-delfind="' + i + '" aria-label="Eintrag löschen" title="Eintrag löschen"><span aria-hidden="true">×</span></button>';
+  const ownCard = o => '<div class="xcard">' + del(o.i) + '<div class="top"><span class="tag mine">Eigene' + (o.x.kind === 'lit' ? ' · ' + esc(o.x.type || 'Literatur') : '') + '</span></div><h4>' + esc(o.x.title) + '</h4>' + (o.x.note ? '<p>' + esc(o.x.note) + '</p>' : '') + '</div>';
+  const rsprCard = r => '<div class="xcard"><div class="top"><span class="tag">' + esc(r.court) + '</span><span class="tag date">' + esc(r.date) + (r.az ? ' · ' + esc(r.az) : '') + '</span></div><h4>' + esc(r.title) + '</h4><p>' + esc(r.note) + '</p>' + (r.cite ? '<div class="cite">' + esc(r.cite) + '</div>' : '') + '</div>';
+  // Rechtsprechung: Praxis → zusätzlich die Entscheidungen aus den Examensfällen, neueste zuerst
+  const recent = new Date().getFullYear() - 3;
+  const rsprItems = m.rspr.map(r => ({ year: yearOf(r.date + ' ' + r.cite), html: rsprCard(r) }));
+  if (isPro) articlesFor(id).filter(a => a.kind === 'Examensfall').forEach(a => {
+    const y = yearOf(a.issue);
+    rsprItems.push({ year: y, html: '<div class="xcard art"><div class="top"><span class="tag">Entscheidung</span>' + (y >= recent ? '<span class="tag new">neu</span>' : '') + '<span class="tag date">' + y + '</span></div><h4>' + esc(a.title) + '</h4><p>' + esc(a.summary) + '</p><div class="cite">' + esc(a.issue) + '</div><a class="art-link" href="' + esc(a.url) + '" target="_blank" rel="noopener">Fall lesen ↗</a></div>' });
+    });
+  if (isPro) rsprItems.sort((a, b) => b.year - a.year);
+  const mineR = mine.map((x, i) => ({ x, i })).filter(o => o.x.kind === 'rspr');
+  const rsprHTML = rsprItems.length || mineR.length ? rsprItems.map(o => o.html).concat(mineR.map(ownCard)).join('')
+    : '<div class="empty-note">Für ' + par(id) + ' sind im Demo-Datensatz keine Entscheidungen hinterlegt.<br>Eigene Fundstellen kannst du oben ergänzen.</div>';
+  const artCard = a => '<div class="xcard art"><div class="top"><span class="tag ' + (a.src === 'Examensgerecht' ? 'eg' : 'zjs') + '">' + esc(a.src || 'ZJS') + ' · ' + esc(a.kind) + '</span><span class="tag date">' + esc(a.issue) + (a.pages ? ', ' + esc(a.pages) : '') + '</span></div>' +
+    '<h4>' + esc(a.title) + '</h4>' + (a.authors ? '<div class="authors">' + (a.src === 'Examensgerecht' ? 'Bearbeitung: ' : '') + esc(a.authors) + '</div>' : '') +
+    '<p>' + esc(a.summary) + '</p><a class="art-link" href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.src === 'Examensgerecht' ? 'Fall lesen ↗' : 'Artikel lesen ↗') + '</a></div>';
+  const litCard = r => '<div class="xcard"><div class="top"><span class="tag lit">' + esc(r.type) + '</span></div><h4>' + esc(r.title) + '</h4><p>' + esc(r.note) + '</p><div class="cite">' + esc(r.cite) + '</div></div>';
+  // Literatur: Kategorien filtern, Reihenfolge je nach Rolle
+  const cats = litCats(), R = RANK[role()];
+  let items = [];
+  articlesFor(id).forEach(a => items.push({ cat: catOfArticle(a), sub: (a.kind === 'Entscheidungsanmerkung') === isPro ? 0 : 1, year: yearOf(a.issue), html: artCard(a) }));
+  m.lit.forEach(r => items.push({ cat: 'aufsatz', sub: 2, year: 0, html: litCard(r) }));
+  META.litGeneral.forEach(r => items.push({ cat: catOfGeneral(r), sub: 0, year: 0, html: litCard(r) }));
+  const counts = {}; items.forEach(it => { counts[it.cat] = (counts[it.cat] || 0) + 1; });
+  items = items.filter(it => cats[it.cat]).sort((a, b) => R[a.cat] - R[b.cat] || a.sub - b.sub || b.year - a.year);
+  const mineL = mine.map((x, i) => ({ x, i })).filter(o => o.x.kind === 'lit');
+  const litHTML = items.map(it => it.html).concat(mineL.map(ownCard)).join('') ||
+    '<div class="empty-note">Alle Kategorien sind ausgeblendet – oben einzelne Kategorien einschalten.</div>';
+  const litFlt = '<div class="litflt" role="group" aria-label="Literatur filtern">' + LIT_CATS.map(([k, l]) =>
+    '<button class="lf' + (cats[k] ? ' on' : '') + '" data-litcat="' + k + '" aria-pressed="' + !!cats[k] + '">' + l + ' <i>' + (counts[k] || 0) + '</i></button>').join('') + '</div>';
+  const cls = f === 'rspr' ? 'only-rspr' : f === 'lit' ? 'only-lit' : '';
+  $('#extra').innerHTML = '<div class="extra-inner">' +
+    '<div class="extra-bar"><button class="back" data-act="to-top">↑ Zum Normtext</button><div class="extra-title"><span class="t-eyebrow">' + par(id) + ' · ' + esc(n.title) + '</span><h2>Rechtsprechung, Literatur und Notizen.</h2></div>' +
+    '<div class="flt">' + [['all', 'Alles'], ['rspr', 'Rechtsprechung'], ['lit', 'Literatur']].map(([k, l]) => '<button data-flt="' + k + '" class="' + (f === k ? 'on' : '') + '">' + l + '</button>').join('') + '</div></div>' +
+    '<div class="jf-note jf-note--info extra-note"><div class="jf-note__label">Hinweis · Quellen</div><div class="jf-note__body">Die ZJS-Beiträge und Examensgerecht-Fälle (frei zugänglich) wurden am 5.10.2026 recherchiert; die Kurzzusammenfassungen beruhen auf Einleitung, Leitsätzen, Gliederung bzw. der Zusammenfassung der Quellen. Rechtsprechung und Kommentare sind Beispielinhalte und nicht redaktionell geprüft. Eigene Einträge werden lokal in deinem Browser gespeichert.</div></div>' +
+    '<div class="extra-grid ' + cls + '">' +
+      (f !== 'lit' ? '<section class="col"><h3>' + (isPro ? 'Rechtsprechung · neueste zuerst' : 'Rechtsprechung') + ' <button class="linkbtn" data-act="add-find" data-kind="rspr">+ Eigene Fundstelle</button></h3>' + rsprHTML + '</section>' : '') +
+      (f !== 'rspr' ? '<section class="col"><h3>' + (isPro ? 'Kommentare und Literatur' : 'Literatur') + ' <button class="linkbtn" data-act="add-find" data-kind="lit">+ Eigene Fundstelle</button></h3>' + litFlt + litHTML + '</section>' : '') +
+      '<section class="col col-notes"><h3 id="notes-h">Meine Notizen</h3><textarea class="notes" id="notes" aria-labelledby="notes-h" placeholder="Eselsbrücken, Prüfungsschemata, Streitstände …"></textarea></section>' +
+    '</div></div>';
+  const ta = $('#notes'); ta.value = S.notes[id] || '';
+  ta.addEventListener('input', () => { S.notes[id] = ta.value; if (!ta.value) delete S.notes[id]; saveSoon(); });
+}
+
+function renderTop() {
+  $$('[data-linkmode]').forEach(b => b.classList.toggle('on', b.dataset.linkmode === S.settings.linkMode));
+  $$('[data-role]').forEach(b => b.classList.toggle('on', b.dataset.role === role()));
+  document.body.dataset.role = role();
+  $('#stage').classList.toggle('no-left', !S.settings.left);
+  $('#stage').classList.toggle('no-right', !S.settings.right);
+  $('#btnLeft').classList.toggle('on', S.settings.left);
+  $('#btnRight').classList.toggle('on', S.settings.right);
+  document.documentElement.style.setProperty('--law-size', S.settings.fs + 'px');
+}
+function renderChrome() { renderTop(); renderCrumbs(); renderLeft(); renderRight(); renderTags(); renderHint(); renderExtra(); document.title = par(focusId()) + ' ' + LAW.norms[focusId()].title + ' – Normfenster'; }
+function renderAll() { buildTerms(); renderPanes(); renderChrome(); }
+
+/* ================================================================ Lernstand-Analyse (regelbasiert) */
+function attention(id) { const s = S.stats[id]; return s ? Math.min(1, s.visits / 3 + s.secs / 90) : 0; }
+function isRead(id) { const s = S.stats[id]; return !!s && (s.secs >= READ_SECS || s.visits >= 2); }
+function learnItems() {
+  return LAW.order.filter(id => !LAW.norms[id].gone && M(id)).map(id => {
+    const m = M(id), s = S.stats[id] || { visits: 0, secs: 0 };
+    const neigh = Array.from(new Set(m.tags.map(t => t[0]).concat(REV[id] || []))).filter(x => LAW.norms[x] && !LAW.norms[x].gone && x !== id);
+    let best = null; neigh.forEach(x => { const a = attention(x); if (!best || a > best.a) best = { id: x, a }; });
+    const gap = (m.imp / 5) * (1 - attention(id));
+    const boost = 1 + 0.9 * (best ? best.a : 0);
+    return { id, imp: m.imp, s, gap, score: gap * boost, best };
+  });
+}
+function renderLearn() {
+  const items = learnItems();
+  const total = items.length, read = items.filter(x => isRead(x.id)).length;
+  const touched = Object.values(S.stats).reduce((a, s) => a + (s.visits || 0), 0);
+  const topics = META.topics.map(t => {
+    const ids = t.ids.filter(id => LAW.norms[id] && !LAW.norms[id].gone);
+    const r = ids.filter(isRead).length;
+    return '<div class="topic-row"><div class="l"><span>' + esc(t.label) + '</span><span>' + r + '/' + ids.length + '</span></div><div class="bar ' + (r === ids.length ? 'good' : '') + '"><i style="width:' + (ids.length ? r / ids.length * 100 : 0) + '%"></i></div></div>';
+  }).join('');
+  let recs;
+  if (touched < 3) recs = '<div class="empty-note">Sobald du ein paar Normen gelesen hast, erscheinen hier Empfehlungen.<br><button class="linkbtn" data-act="demo">Demo-Daten laden</button></div>';
+  else {
+    const top = items.filter(x => x.score > 0.12).sort((a, b) => b.score - a.score).slice(0, 5);
+    recs = top.length ? top.map(x => {
+      const why = ['Prüfungsrelevanz ' + x.imp + ' von 5', x.s.visits ? x.s.visits + '× geöffnet, ' + fmtSecs(x.s.secs) + ' gelesen' : 'noch nie geöffnet'];
+      if (x.best && x.best.a >= 0.5) why.push('hängt zusammen mit ' + par(x.best.id) + ' (' + (stat(x.best.id).visits) + '× gelesen)');
+      return '<div class="rec" data-nav="' + x.id + '"><div class="h"><b>' + par(x.id) + ' ' + esc(LAW.norms[x.id].title) + '</b><span class="pri">' + (x.score > 0.7 ? 'wichtig' : 'nachholen') + '</span></div><div class="why">' + why.join(' · ') + '</div></div>';
+    }).join('') : '<div class="empty-note">Keine auffälligen Lücken.</div>';
+  }
+  return '<div class="card-s"><h4>Gelesen: ' + read + ' von ' + total + ' Normen</h4><div class="bar ' + (read === total ? 'good' : '') + '"><i style="width:' + (total ? read / total * 100 : 0) + '%"></i></div></div>' +
+    '<div class="card-s"><h4>Themenblöcke</h4>' + topics + '</div>' +
+    '<div class="group-label">Lernlücken · diese Normen fehlen dir</div><div class="recs">' + recs + '</div>' +
+    '<div class="fine">Regelbasierte Mustererkennung: Prüfungsrelevanz × Verknüpfung mit oft gelesenen Normen × bisherige Verweildauer. Als „gelesen“ zählt eine Norm ab ' + READ_SECS + ' Sek. Verweildauer oder 2 Besuchen. Alles bleibt lokal in deinem Browser.</div>';
+}
+
+/* ================================================================ Popovers (Definitionen & Verweis-Vorschau) */
+const pop = $('#pop'); let popTimer = null, popFor = null;
+function placePop(rect) {
+  pop.hidden = false;
+  const w = pop.offsetWidth, h = pop.offsetHeight;
+  let x = Math.min(Math.max(8, rect.left), innerWidth - w - 8);
+  let y = rect.bottom + 8; if (y + h > innerHeight - 8) y = Math.max(8, rect.top - h - 8);
+  pop.style.left = x + 'px'; pop.style.top = y + 'px';
+}
+function showTermPop(el) {
+  const key = el.dataset.term, d = DEFBY[key], own = S.customDefs[key];
+  const term = d ? d.term : (own && own.term) || key;
+  const subs = d && d.sub ? d.sub.map(s => '<div class="subdef"><b>' + esc(s.term) + ':</b> ' + esc(s.text) + '</div>').join('') : '';
+  const std = d ? '<p>' + esc(d.text) + '</p>' + subs : '';
+  const kind = d ? '<span class="kind">Definition</span>' : '<span class="kind">Eigene</span>';
+  const mine = own && own.text
+    ? '<div class="mine"><div class="mh">Meine Definition</div><div>' + esc(own.text).replace(/\n/g, '<br>') + '</div></div>' : '';
+  pop.innerHTML = '<div class="ph"><strong>' + esc(term) + '</strong>' + kind + '</div>' + std + mine +
+    '<div class="row"><button class="linkbtn" data-editdef="' + esc(key) + '">' + (own ? 'Meine Definition bearbeiten' : '+ Eigene Definition') + '</button></div>';
+  popFor = el; placePop(el.getBoundingClientRect());
+}
+function showRefPop(el) {
+  const id = el.dataset.norm; const n = LAW.norms[id]; if (!n) return;
+  const first = n.blocks.slice(0, 2).map(b => (b.t === 'abs' ? '(' + b.n + ') ' : '') + b.text).join(' ');
+  const txt = first.length > 260 ? first.slice(0, 260).replace(/\s+\S*$/, '') + ' …' : first;
+  pop.innerHTML = '<div class="ph"><strong>' + par(id) + ' ' + esc(n.title) + '</strong><span class="kind leg">Vorschau</span></div>' +
+    (n.gone ? '<p><em>weggefallen</em></p>' : '<div class="prev">' + esc(txt) + '</div>') +
+    '<div class="hint">' + (S.settings.linkMode === 'split' ? 'Klick: im Splitscreen daneben öffnen' : 'Klick: in neuem Tab öffnen') + ' · Strg+Klick: neuer Tab</div>';
+  popFor = el; placePop(el.getBoundingClientRect());
+}
+const hidePop = () => { pop.hidden = true; popFor = null; };
+const schedHide = () => { clearTimeout(popTimer); popTimer = setTimeout(hidePop, 220); };
+document.addEventListener('mouseover', e => {
+  const t = e.target.closest ? e.target.closest('.term, a.xref:not(.ext)') : null;
+  if (pop.contains(e.target)) { clearTimeout(popTimer); return; }
+  if (!t) return;
+  if (t === popFor && !pop.hidden) { clearTimeout(popTimer); return; }
+  clearTimeout(popTimer);
+  popTimer = setTimeout(() => { t.classList.contains('term') ? showTermPop(t) : showRefPop(t); }, 180);
+});
+document.addEventListener('mouseout', e => {
+  const t = e.target.closest ? e.target.closest('.term, a.xref:not(.ext)') : null;
+  if (t || pop.contains(e.target)) schedHide();
+});
+document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('.term'); if (t) showTermPop(t); });
+
+/* ================================================================ Modal / Toast */
+const modalEl = $('#modal');
+let modalReturnFocus = null;
+function openModal(html, onMount) {
+  hidePop();
+  modalReturnFocus = document.activeElement;
+  modalEl.innerHTML = '<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-title">' + html + '</div>'; modalEl.hidden = false;
+  const h = $('h3', modalEl); if (h) h.id = 'dlg-title';
+  const first = $('input, textarea, .role-card, button', modalEl); if (first) setTimeout(() => { first.focus(); if (first.select && first.tagName === 'INPUT') first.select(); }, 10);
+  if (onMount) onMount($('.dlg', modalEl));
+}
+const closeModal = () => {
+  if (modalEl.hidden) return;
+  modalEl.hidden = true; modalEl.innerHTML = '';
+  if (modalReturnFocus && document.contains(modalReturnFocus)) { try { modalReturnFocus.focus(); } catch (e) { /* Element nicht fokussierbar */ } }
+  modalReturnFocus = null;
+};
+modalEl.addEventListener('mousedown', e => { if (e.target === modalEl) closeModal(); });
+// Fokus im Dialog halten (Tab / Shift+Tab)
+modalEl.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const f = $$('input, textarea, select, button, a[href]', modalEl).filter(x => !x.disabled && x.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+let toastTimer;
+function toast(msg, action) {
+  const t = $('#toast');
+  t.innerHTML = '<span>' + esc(msg) + '</span>' + (action ? '<button>' + esc(action.label) + '</button>' : '');
+  t.hidden = false;
+  if (action) $('button', t).onclick = () => { t.hidden = true; action.fn(); };
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, action ? 9000 : 2600);
+}
+
+function defModal(key, prefill) {
+  const d = key ? DEFBY[key] : null, own = key ? S.customDefs[key] : null;
+  const term = d ? d.term : own ? own.term : (prefill || '');
+  openModal('<h3>' + (own ? 'Eigene Definition bearbeiten.' : 'Eigene Definition anlegen.') + '</h3><div class="sub">Begriffe mit eigener Definition werden im Text korallefarben unterstrichen und beim Hover angezeigt.</div>' +
+    (d ? '<div class="ref"><b>Standard:</b> ' + esc(d.text) + '</div>' : '') +
+    '<form><label for="f-term">Begriff</label><input id="f-term" name="term" value="' + esc(term) + '" ' + (d ? 'readonly' : '') + ' required maxlength="60">' +
+    '<label for="f-text">Meine Definition oder Merksatz</label><textarea id="f-text" name="text" required>' + esc(own ? own.text : '') + '</textarea>' +
+    '<div class="acts">' + (own ? '<button type="button" class="jf-btn jf-btn--secondary left" data-del>Löschen</button>' : '') + '<button type="button" class="jf-btn jf-btn--secondary" data-cancel>Abbrechen</button><button class="jf-btn jf-btn--primary">Speichern</button></div></form>',
+  dlg => {
+    $('[data-cancel]', dlg).onclick = closeModal;
+    const delb = $('[data-del]', dlg); if (delb) delb.onclick = () => { delete S.customDefs[key]; save(); closeModal(); renderAll(); toast('Eigene Definition gelöscht'); };
+    $('form', dlg).onsubmit = e => {
+      e.preventDefault();
+      const f = e.target, t = f.term.value.trim(), x = f.text.value.trim(); if (!t || !x) return;
+      const k = key || 'c:' + t.toLowerCase();
+      S.customDefs[k] = { term: t, text: x }; save(); closeModal(); renderAll(); toast('Definition für „' + t + '“ gespeichert');
+    };
+  });
+}
+function tagModal() {
+  const id = focusId();
+  openModal('<h3>Eigenen Tag hinzufügen.</h3><div class="sub">Für ' + par(id) + ' · eine Norm, die du bei dieser Vorschrift immer mitprüfst.</div>' +
+    '<form><label for="f-n">Norm, z. B. 25 oder 218a</label><input id="f-n" name="n" placeholder="25" required maxlength="8"><label for="f-l">Kurzlabel (optional)</label><input id="f-l" name="l" maxlength="40" placeholder="z. B. Mittäterschaft">' +
+    '<div class="acts"><button type="button" class="jf-btn jf-btn--secondary" data-cancel>Abbrechen</button><button class="jf-btn jf-btn--primary">Hinzufügen</button></div></form>',
+  dlg => {
+    $('[data-cancel]', dlg).onclick = closeModal;
+    $('form', dlg).onsubmit = e => {
+      e.preventDefault();
+      const n = e.target.n.value.toLowerCase().replace(/[§\s]/g, '');
+      if (!/^\d+[a-z]?$/.test(n)) { toast('Bitte eine Normnummer wie „25“ oder „218a“ eingeben'); return; }
+      (S.customTags[id] = S.customTags[id] || []).push({ n, l: e.target.l.value.trim() }); save(); closeModal(); renderTags();
+    };
+  });
+}
+function findModal(kind) {
+  const id = focusId();
+  openModal('<h3>Eigene Fundstelle ergänzen.</h3><div class="sub">Für ' + par(id) + ' · wird lokal in deinem Browser gespeichert.</div>' +
+    '<form><label for="f-kind">Art</label><select id="f-kind" name="kind"><option value="rspr"' + (kind === 'rspr' ? ' selected' : '') + '>Rechtsprechung</option><option value="lit"' + (kind === 'lit' ? ' selected' : '') + '>Literatur</option></select>' +
+    '<label for="f-type">Typ (bei Literatur)</label><select id="f-type" name="type"><option>Kommentar</option><option>Lehrbuch</option><option>Aufsatz</option><option>Sonstiges</option></select>' +
+    '<label for="f-title">Fundstelle oder Titel</label><input id="f-title" name="title" required maxlength="160" placeholder="z. B. BGH, Urt. v. … – … StR …/…">' +
+    '<label for="f-note">Notiz (optional)</label><textarea id="f-note" name="note"></textarea>' +
+    '<div class="acts"><button type="button" class="jf-btn jf-btn--secondary" data-cancel>Abbrechen</button><button class="jf-btn jf-btn--primary">Speichern</button></div></form>',
+  dlg => {
+    $('[data-cancel]', dlg).onclick = closeModal;
+    $('form', dlg).onsubmit = e => {
+      e.preventDefault(); const f = e.target;
+      (S.finds[id] = S.finds[id] || []).push({ kind: f.kind.value, type: f.type.value, title: f.title.value.trim(), note: f.note.value.trim() });
+      save(); closeModal(); renderExtra(); renderHint();
+    };
+  });
+}
+
+/* ================================================================ Suche */
+const qEl = $('#q'), resEl = $('#results'); let resSel = 0, resList = [];
+function runSearch(raw) {
+  const q = raw.trim().toLowerCase(); if (!q) return [];
+  const num = q.replace(/^§+\s*/, '').replace(/\s+/g, '');
+  const out = [];
+  LAW.order.forEach(id => {
+    const n = LAW.norms[id]; let score = 0, snip = '';
+    if (/^\d+[a-z]?$/.test(num)) { if (id === num) score = 100; else if (id.startsWith(num)) score = 70; }
+    const t = n.title.toLowerCase();
+    if (!score && t.includes(q)) score = 60 + (t.startsWith(q) ? 5 : 0);
+    if (!score && q.length >= 3) { const k = n.plain.indexOf(q); if (k >= 0) { score = 30; snip = n.plain.slice(Math.max(0, k - 40), k + q.length + 60); } }
+    if (!score && q.length >= 4) {
+      const d = META.defs.find(x => x.in.includes(id) && (x.term.toLowerCase().includes(q) || (x.sub || []).some(s => s.term.toLowerCase().includes(q))));
+      if (d) { score = 20; snip = 'Begriff: ' + d.term; }
+    }
+    if (score) out.push({ id, score: score - (n.gone ? 25 : 0), snip });
+  });
+  return out.sort((a, b) => b.score - a.score || sortKey(a.id) - sortKey(b.id)).slice(0, 8);
+}
+function renderResults() {
+  const q = qEl.value; resList = runSearch(q);
+  if (!q.trim()) { resEl.hidden = true; qEl.setAttribute('aria-expanded', 'false'); return; }
+  resEl.hidden = false; qEl.setAttribute('aria-expanded', 'true'); resSel = 0;
+  const hl = s => esc(s).replace(new RegExp('(' + escRe(esc(q.trim())) + ')', 'ig'), '<mark>$1</mark>');
+  resEl.innerHTML = resList.length ? resList.map((r, i) => '<div role="option" aria-selected="' + (i === 0) + '" class="res' + (i === 0 ? ' sel' : '') + '" data-res="' + r.id + '"><span><b>' + par(r.id) + '</b> ' + hl(LAW.norms[r.id].title) + '</span>' +
+    '<small>' + esc(LAW.norms[r.id].section.nr + '. Abschnitt') + (r.snip ? ' · …' + hl(r.snip) + '…' : '') + '</small></div>').join('') : '<div class="empty">Keine Treffer im Beispieltext.</div>';
+}
+function pickResult(id, split) { resEl.hidden = true; qEl.value = ''; qEl.blur(); go(id, { mode: split ? 'split' : 'replace' }); }
+qEl.addEventListener('input', renderResults);
+qEl.addEventListener('focus', renderResults);
+qEl.addEventListener('keydown', e => {
+  const rows = $$('.res', resEl);
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); if (!rows.length) return;
+    resSel = (resSel + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length;
+    rows.forEach((r, i) => { r.classList.toggle('sel', i === resSel); r.setAttribute('aria-selected', i === resSel); });
+  } else if (e.key === 'Enter') { const r = resList[resSel]; if (r) pickResult(r.id, e.shiftKey); }
+  else if (e.key === 'Escape') { resEl.hidden = true; qEl.blur(); }
+});
+resEl.addEventListener('mousedown', e => { const r = e.target.closest('.res'); if (r) { e.preventDefault(); pickResult(r.dataset.res, e.shiftKey); } });
+document.addEventListener('mousedown', e => { if (!e.target.closest('.search')) resEl.hidden = true; });
+
+/* ================================================================ Einstellungen */
+const setEl = $('#settings');
+function renderSettings() {
+  const sw = (k, on) => '<button class="switch' + (on ? ' on' : '') + '" role="switch" aria-checked="' + on + '" data-sw="' + k + '"></button>';
+  setEl.innerHTML = '<h3>Einstellungen.</h3>' +
+    '<div class="set-row"><div><div>Ansicht</div><div class="d">Passt Lernhilfen, Literatur-Reihenfolge und Lernstand an. Beim Wechsel werden „Kurz erklärt“ und Begriffe auf die Rollen-Voreinstellung gesetzt.</div></div><select data-sel="role"><option value="student"' + (role() === 'student' ? ' selected' : '') + '>Studium</option><option value="pro"' + (role() === 'pro' ? ' selected' : '') + '>Praxis</option></select></div>' +
+    '<div class="set-row"><div><div>Verweise öffnen als</div><div class="d">Splitscreen im selben Tab oder neuer Browser-Tab</div></div><select data-sel="linkMode"><option value="split"' + (S.settings.linkMode === 'split' ? ' selected' : '') + '>Splitscreen</option><option value="tab"' + (S.settings.linkMode === 'tab' ? ' selected' : '') + '>Neuer Tab</option></select></div>' +
+    '<div class="set-row"><div><div>„Kurz erklärt“ anzeigen</div><div class="d">Klartext-Zusammenfassung je Norm</div></div>' + sw('explain', S.settings.explain) + '</div>' +
+    '<div class="set-row"><div><div>Begriffe hervorheben</div><div class="d">Definitionen beim Drüberhovern</div></div>' + sw('defs', S.settings.defs) + '</div>' +
+    '<div class="set-row"><div><div>Weggefallene Normen zeigen</div></div>' + sw('showGone', S.settings.showGone) + '</div>' +
+    '<div class="set-row"><div>Schriftgröße</div><input type="range" min="14" max="22" step="1" value="' + S.settings.fs + '" data-range="fs"></div>' +
+    '<div class="set-actions"><button class="jf-btn jf-btn--secondary" data-act="demo">Demo-Daten laden</button><button class="jf-btn jf-btn--secondary" data-act="export">Daten exportieren</button><button class="jf-btn jf-btn--secondary" data-act="import">Importieren</button><button class="jf-btn jf-btn--secondary" data-act="reset">Alles zurücksetzen</button></div>' +
+    (storageOk ? '' : '<div class="jf-note jf-note--foxxy" style="margin-top:var(--space-3)"><div class="jf-note__label">Speicher nicht verfügbar</div><div class="jf-note__body">Änderungen gehen beim Schließen des Browsers verloren.</div></div>');
+}
+$('#btnSettings').onclick = e => { e.stopPropagation(); if (setEl.hidden) { renderSettings(); setEl.hidden = false; } else setEl.hidden = true; };
+document.addEventListener('mousedown', e => { if (!setEl.hidden && !e.target.closest('#settings, #btnSettings')) setEl.hidden = true; });
+setEl.addEventListener('click', e => {
+  const sw = e.target.closest('[data-sw]');
+  if (sw) { S.settings[sw.dataset.sw] = !S.settings[sw.dataset.sw]; save(); renderSettings(); renderPanes(); renderChrome(); return; }
+});
+setEl.addEventListener('change', e => {
+  const sel = e.target.closest('[data-sel]'); if (!sel) return;
+  if (sel.dataset.sel === 'role') { applyRole(sel.value); renderSettings(); return; }
+  S.settings[sel.dataset.sel] = sel.value; save(); renderPanes(); renderChrome();
+});
+setEl.addEventListener('input', e => {
+  const r = e.target.closest('[data-range]'); if (!r) return;
+  S.settings[r.dataset.range] = +r.value; saveSoon(); renderTop();
+});
+
+/* ---- Demo / Export / Import / Reset */
+function loadDemo() {
+  const now = Date.now(), H = 3600e3, D = 24 * H;
+  const plan = [['211', 6, 340, 2 * D + 3 * H], ['212', 5, 260, 2 * D + 2 * H], ['222', 3, 120, 2 * D], ['223', 6, 300, D + 5 * H], ['224', 4, 210, D + 3 * H],
+    ['218', 2, 90, D], ['218a', 3, 140, 4 * H], ['219', 1, 25, 3 * H], ['225', 1, 12, 2 * H], ['229', 2, 45, H]];
+  S.stats = {}; S.history = [];
+  plan.forEach(([id, v, secs, ago_]) => { S.stats[id] = { visits: v, secs, last: now - ago_ }; });
+  S.history = plan.map(([id, , , ago_]) => ({ id, ts: now - ago_ })).sort((a, b) => b.ts - a.ts);
+  S.bookmarks = ['211', '212', '223'];
+  save(); renderAll(); toast('Demo-Daten geladen – schau in „Lernstand“.', { label: 'Lernstand öffnen', fn: () => { ui.leftTab = 'learn'; renderLeft(); } });
+}
+function exportData() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'normfenster-daten.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function importData() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/json';
+  inp.onchange = () => {
+    const f = inp.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { try { const d = JSON.parse(rd.result); S = Object.assign({}, DEFAULT, d, { settings: Object.assign({}, DEFAULT.settings, d.settings) }); save(); renderAll(); toast('Daten importiert'); } catch (err) { toast('Datei konnte nicht gelesen werden'); } };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+
+/* ================================================================ Globale Klick-Behandlung */
+document.addEventListener('click', e => {
+  const t = e.target;
+
+  const dt = t.closest('[data-deltag]');
+  if (dt) { e.preventDefault(); const id = focusId(); (S.customTags[id] || []).splice(+dt.dataset.deltag, 1); save(); renderTags(); return; }
+
+  // Verweise im Text + Tags
+  const xr =t.closest('a.xref:not(.ext), a.chip[data-norm]');
+  if (xr) {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;       // Browser-Standard: neuer Tab/Fenster
+    e.preventDefault(); hidePop();
+    const id = xr.dataset.norm;
+    if (S.settings.linkMode === 'tab' && !xr.closest('.nrow')) { window.open(location.href.split('#')[0] + '#/stgb/' + id, '_blank'); return; }
+    go(id, { mode: 'split', from: focusedPaneFromEl(xr), abs: xr.dataset.abs }); return;
+  }
+  if (t.closest('a.xref.ext, a.chip.ext')) return;       // externer Link: Browser-Standard (neuer Tab)
+
+  // Navigation in Seitenleisten (ersetzt die aktive Norm)
+  const nav = t.closest('[data-nav]');
+  if (nav && !t.closest('[data-unbm]')) {
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+    e.preventDefault(); go(nav.dataset.nav, { mode: 'replace' }); return;
+  }
+  const crumb = t.closest('[data-go]'); if (crumb) { go(crumb.dataset.go, { mode: 'replace' }); return; }
+  const secgo = t.closest('[data-secgo]'); if (secgo) { go(secgo.dataset.secgo, { mode: 'replace' }); return; }
+
+  const unbm = t.closest('[data-unbm]'); if (unbm) { e.preventDefault(); toggleBm(unbm.dataset.unbm); return; }
+  const tab = t.closest('[data-tab]'); if (tab) { ui.leftTab = tab.dataset.tab; renderLeft(); return; }
+  const lm = t.closest('[data-linkmode]'); if (lm) { S.settings.linkMode = lm.dataset.linkmode; save(); renderTop(); toast(lm.dataset.linkmode === 'split' ? 'Verweise öffnen im Splitscreen' : 'Verweise öffnen in neuem Tab'); return; }
+  const lc = t.closest('[data-litcat]');
+  if (lc) { const r = role(), cur = litCats(); S.settings.litCats = S.settings.litCats || {}; S.settings.litCats[r] = Object.assign({}, cur, { [lc.dataset.litcat]: !cur[lc.dataset.litcat] }); save(); renderExtra(); return; }
+  const rb = t.closest('[data-role]'); if (rb) { if (rb.dataset.role !== role() || rb.closest('.role-cards')) applyRole(rb.dataset.role, rb.closest('.role-cards') && rb.dataset.role === 'student'); return; }
+  const flt = t.closest('[data-flt]'); if (flt) { ui.extraFilter = flt.dataset.flt; renderExtra(); return; }
+  const df =t.closest('[data-delfind]'); if (df) { (S.finds[focusId()] || []).splice(+df.dataset.delfind, 1); save(); renderExtra(); renderHint(); return; }
+  const ed = t.closest('[data-editdef]'); if (ed) { defModal(ed.dataset.editdef); return; }
+
+  const cite = t.closest('[data-cite]'); if (cite) { copy(cite.dataset.cite); return; }
+
+  const pb = t.closest('.pane [data-act]');
+  if (pb) {
+    const i = +pb.closest('.pane').dataset.idx, id = ui.panes[i];
+    if (pb.dataset.act === 'bm') toggleBm(id);
+    else if (pb.dataset.act === 'copy') copy(par(id) + ' ' + META.law.abbr);
+    else if (pb.dataset.act === 'close') closePane(i);
+    else if (pb.dataset.act === 'solo') soloPane(i);
+    return;
+  }
+  const pane = t.closest('.pane'); if (pane && !t.closest('a')) setFocus(+pane.dataset.idx);
+
+  const act = t.closest('[data-act]');
+  if (act) {
+    switch (act.dataset.act) {
+      case 'clear-history': if (confirm('Verlauf wirklich leeren? (Lernstand-Daten bleiben erhalten)')) { S.history = []; save(); renderLeft(); } break;
+      case 'toggle-gone': S.settings.showGone = !S.settings.showGone; save(); renderRight(); break;
+      case 'add-tag': tagModal(); break;
+      case 'add-find': findModal(act.dataset.kind); break;
+      case 'to-top': $('#scroller').scrollTo({ top: 0 }); break;
+      case 'demo': setEl.hidden = true; loadDemo(); break;
+      case 'export': exportData(); break;
+      case 'import': setEl.hidden = true; importData(); break;
+      case 'reset': if (confirm('Alle lokalen Daten (Verlauf, Lesezeichen, Notizen, Definitionen) löschen?')) { try { localStorage.removeItem(STORE_KEY); } catch (err) { /* ignorieren */ } location.hash = ''; location.reload(); } break;
+    }
+    return;
+  }
+  if (t.closest('#hintbar')) { $('#scroller').scrollTo({ top: $('#stage').offsetHeight - 10 }); }
+});
+function copy(text) {
+  const done = () => toast('Zitat kopiert: ' + text);
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => toast('Kopieren nicht möglich'));
+  else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('Kopieren nicht möglich'); } ta.remove(); }
+}
+function toggleBm(id) {
+  const i = S.bookmarks.indexOf(id);
+  if (i >= 0) S.bookmarks.splice(i, 1); else S.bookmarks.push(id);
+  save(); renderPanes(); renderLeft(); renderRight();
+}
+$('#btnLeft').onclick = () => { S.settings.left = !S.settings.left; save(); renderTop(); };
+$('#btnRight').onclick = () => { S.settings.right = !S.settings.right; save(); renderTop(); };
+
+/* Auswahl → „Eigene Definition“ */
+const selBtn = $('#selbtn'); let selText = '';
+document.addEventListener('mouseup', e => {
+  if (e.target === selBtn) return;
+  setTimeout(() => {
+    const sel = getSelection(); const txt = sel ? sel.toString().trim() : '';
+    if (txt && txt.length >= 3 && txt.length <= 60 && !/\n/.test(txt) && sel.rangeCount && sel.anchorNode && sel.anchorNode.parentElement && sel.anchorNode.parentElement.closest('.pane-body')) {
+      const r = sel.getRangeAt(0).getBoundingClientRect(); selText = txt;
+      selBtn.hidden = false; selBtn.style.left = Math.min(r.left, innerWidth - 170) + 'px'; selBtn.style.top = (r.top - 38 < 8 ? r.bottom + 6 : r.top - 38) + 'px';
+    } else selBtn.hidden = true;
+  }, 10);
+});
+selBtn.addEventListener('mousedown', e => e.preventDefault());
+selBtn.addEventListener('click', () => { selBtn.hidden = true; const key = 'c:' + selText.toLowerCase(); defModal(S.customDefs[key] ? key : null, selText); getSelection().removeAllRanges(); });
+$('#scroller').addEventListener('scroll', () => { selBtn.hidden = true; hidePop(); }, { passive: true });
+
+/* Tastatur */
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); qEl.focus(); qEl.select(); return; }
+  if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) { e.preventDefault(); qEl.focus(); return; }
+  if (e.key === 'Escape') { if (!modalEl.hidden) closeModal(); else if (!setEl.hidden) setEl.hidden = true; else hidePop(); }
+});
+
+/* ================================================================ Verweildauer */
+let dirty = 0;
+setInterval(() => {
+  const id = focusId();
+  if (!id || role() !== 'student' || document.visibilityState !== 'visible' || !document.hasFocus()) return;   // Praxis: kein Lern-Tracking
+  stat(id).secs++; if (++dirty >= 10) { dirty = 0; save(); if (ui.leftTab === 'learn') renderLeft(); }
+}, 1000);
+
+/* ================================================================ Start */
+function parseHash() {
+  const m = /^#\/stgb\/([0-9a-z,]+)/.exec(location.hash);
+  return m ? m[1].split(',').filter((id, i, a) => LAW.norms[id] && a.indexOf(id) === i).slice(0, MAXPANES) : [];
+}
+window.addEventListener('hashchange', () => {
+  const p = parseHash();
+  if (p.length && p.join() !== ui.panes.join()) { ui.panes = p; ui.focus = Math.min(ui.focus, p.length - 1); afterNav(focusId()); }
+});
+
+// Einmalige Rollenwahl beim ersten Start (jederzeit oben rechts oder in den Einstellungen änderbar)
+function roleChooser() {
+  openModal('<h3>Wähle deine Ansicht.</h3><div class="sub">Sie passt Hilfen und Literatur an. Du kannst jederzeit oben rechts wechseln.</div>' +
+    '<div class="role-cards">' +
+      '<button class="role-card" data-role="student"><b>Studium</b><span>Kurz erklärt, Begriffe zum Hovern, Lernstand, Prüfungsrelevanz. Literatur: ZJS-Aufsätze, Übungs- und Examensfälle, Lehrbücher.</span></button>' +
+      '<button class="role-card" data-role="pro"><b>Praxis</b><span>Ruhiger Text, Fußnoten offen, kein Lernstand. Literatur: Kommentare und Anmerkungen; Rechtsprechung, neueste zuerst.</span></button>' +
+    '</div>');
+  S.settings.roleChosen = true; save();   // nur einmal fragen
+}
+
+function init() {
+  buildTerms();
+  const fromHash = parseHash();
+  let restored = false;
+  if (fromHash.length) { ui.panes = fromHash; ui.focus = 0; }
+  else if (S.last && S.last.panes && S.last.panes.filter(id => LAW.norms[id]).length) { ui.panes = S.last.panes.filter(id => LAW.norms[id]); ui.focus = Math.min(S.last.focus || 0, ui.panes.length - 1); restored = true; }
+  else { ui.panes = ['211']; ui.focus = 0; }
+  if (!restored) recordVisit(focusId());
+  persistLast();
+  renderPanes(); renderChrome();
+  if (!S.settings.roleChosen) { roleChooser(); return; }
+  if (restored && S.history.length > 1) {
+    const h = S.history[0], n = LAW.norms[h.id];
+    toast('Willkommen zurück. Zuletzt gelesen: ' + par(h.id) + ' ' + n.title + ' (' + ago(h.ts) + ')', { label: 'Hier weitermachen', fn: () => { $$('.pane-body')[ui.focus].scrollTo({ top: 0 }); } });
+  }
+}
+init();
+window.__normfenster = { LAW, S: () => S, go, loadDemo };   // für Debugging in der Konsole
+})();
+
+</script>
+</body>
+</html>

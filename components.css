@@ -1,0 +1,47 @@
+/* Jurafuchs Design System – Basis-Komponenten (1:1 aus DESIGN.md, Abschnitt 6.1).
+   In Normfenster genutzt: Button (jf-btn), FeedbackNote (jf-note), visually-hidden.
+   PointsPill und ExamCard sind nicht im Einsatz: Punkte gibt es hier nicht, und die Kartenliste ist flach (kein schwebender Schatten). */
+
+/* ---------- Button ---------- */
+.jf-btn {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.jf-btn--lg { font-size: 15px; padding: 17px 20px; }
+.jf-btn--primary { background: var(--charcoal); color: var(--on-charcoal); }
+.jf-btn--primary:hover { background: var(--ink); }
+.jf-btn--secondary { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
+.jf-btn--secondary:hover { border-color: var(--ink-muted); text-decoration: none; }
+.jf-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.jf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- FeedbackNote ---------- */
+.jf-note {
+  font-family: var(--font-sans);
+  border: 1px solid;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-sizing: border-box;
+}
+.jf-note--info  { background: var(--info-bg);  border-color: var(--info-border); }
+.jf-note--foxxy { background: var(--foxxy-bg); border-color: var(--foxxy-border); }
+.jf-note__label { font-size: 13px; line-height: 18px; font-weight: 700; margin-bottom: 4px; }
+.jf-note--info  .jf-note__label { color: var(--info-ink); }
+.jf-note--foxxy .jf-note__label { color: var(--coral-text); }
+.jf-note__body  { font-size: 12px; line-height: 20px; font-weight: 400; color: var(--ink); }
+
+.jf-visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
