@@ -61,7 +61,7 @@ Zum Testen öffnest du `index.html` direkt im Browser. Die Einzeldatei baust du 
 powershell -ExecutionPolicy Bypass -File build.ps1
 ```
 
-Das Skript schreibt `dist/normfenster.html`. Benenne die Datei bei Bedarf um.
+Das Skript schreibt `dist/jurafuchs-gesetzestexte.html`, also die Datei, die du zum Starten benutzt.
 
 ## Projektstruktur
 

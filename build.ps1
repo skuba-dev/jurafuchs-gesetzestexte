@@ -1,4 +1,4 @@
-# Baut dist/normfenster.html: eine einzelne Datei mit eingebettetem CSS, JS und Gesetzesdaten (läuft offline per Doppelklick).
+# Baut dist/jurafuchs-gesetzestexte.html: eine einzelne Datei mit eingebettetem CSS, JS und Gesetzesdaten (läuft offline per Doppelklick).
 # Start:  powershell -ExecutionPolicy Bypass -File build.ps1
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -28,6 +28,6 @@ foreach ($s in $scripts) {
 if ($html -match 'src="(data/|app\.js)' -or $html -match 'href="(tokens|components|styles)\.css"') { throw 'Es sind noch externe Verweise übrig' }
 
 New-Item -ItemType Directory -Force "$root\dist" | Out-Null
-[IO.File]::WriteAllText("$root\dist\normfenster.html", $html, $enc)
-$f = Get-Item "$root\dist\normfenster.html"
+[IO.File]::WriteAllText("$root\dist\jurafuchs-gesetzestexte.html", $html, $enc)
+$f = Get-Item "$root\dist\jurafuchs-gesetzestexte.html"
 "{0} ({1:N0} KB)" -f $f.Name, ($f.Length / 1KB)
